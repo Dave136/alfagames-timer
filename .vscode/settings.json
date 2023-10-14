@@ -1,9 +1,13 @@
 {
+  "editor.formatOnSave": true,
   "files.associations": {
     "*.css": "tailwindcss"
   },
   "editor.quickSuggestions": {
     "strings": true
+  },
+  "[vue]": {
+    "editor.defaultFormatter": "Vue.volar"
   },
   "tailwindCSS.experimental.classRegex": [
     ["ui:\\s*{([^)]*)\\s*}", "[\"'`]([^\"'`]*).*?[\"'`]"],

@@ -10,6 +10,14 @@ export default defineNuxtConfig({
     icons: ['ph', 'heroicons']
   },
   colorMode: {
-    preference: 'dark'
+    preference: 'system',
+    fallback: 'dark'
+  },
+  app: {
+    head: {
+      htmlAttrs: {
+        class: 'dark'
+      }
+    }
   }
 })
