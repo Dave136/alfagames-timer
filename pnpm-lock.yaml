@@ -20,6 +20,9 @@ dependencies:
   motion:
     specifier: ^10.16.4
     version: 10.16.4
+  pinia:
+    specifier: ^2.1.7
+    version: 2.1.7(vue@3.3.4)
 
 devDependencies:
   '@nuxt/devtools':
