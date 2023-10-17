@@ -1,23 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  modules: [
-    '@pinia/nuxt',
-    '@nuxt/ui'
-  ],
+  modules: ["@pinia/nuxt", "@nuxt/ui"],
   ui: {
     global: true,
-    icons: ['ph', 'heroicons']
+    icons: ["ph", "heroicons"],
   },
   colorMode: {
-    preference: 'system',
-    fallback: 'dark'
+    preference: "system",
+    fallback: "dark",
   },
   app: {
     head: {
       htmlAttrs: {
-        class: 'dark'
-      }
-    }
-  }
-})
+        class: "dark",
+      },
+    },
+  },
+});
