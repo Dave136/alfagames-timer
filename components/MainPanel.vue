@@ -1,5 +1,5 @@
 <template>
   <section>
-    <AppTimer />
+    <AppTimerPanel />
   </section>
 </template>
