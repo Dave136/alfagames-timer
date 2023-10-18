@@ -1,11 +1,9 @@
 type State = {
-  consoleSelected: {
-    id?: string;
-  } & Record<string, any>;
+  times: number;
 };
 
-export const useAppStore = defineStore("app", {
+export const useAppStore = defineStore("app-store", {
   state: (): State => ({
-    consoleSelected: {},
+    times: 0,
   }),
 });
