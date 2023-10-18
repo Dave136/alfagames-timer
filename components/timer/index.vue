@@ -177,12 +177,12 @@ onUnmounted(() => {
         </Motion>
       </g>
 
-      <g fill="currentColor" text-anchor="middle" dominant-baseline="baseline" font-size="4">
+      <g fill="currentColor" text-anchor="middle" dominant-baseline="baseline" font-size="12">
         <text x="-3" y="6.5">
           <template v-for="[key, value], i in Object.entries({ h, m, s })" :key="key">
             <template v-if="countdown >= 60 ** (2 - i)">
               <tspan dx="3" font-weight="bold">{{ padValue(value) }}</tspan>
-              <tspan dx="0.5" font-size="3">{{ key }}</tspan>
+              <tspan dx="0.5" font-size="6">{{ key }}</tspan>
             </template>
           </template>
           <!-- {#each Object.entries({ h, m, s }) as [key, value], i}
@@ -196,12 +196,11 @@ onUnmounted(() => {
     </svg>
 
     <!-- in:fly={{ y: -10, delay: 120 }} -->
-    <div class="flex justify-center">
+    <!-- <div class="flex justify-center">
       <button @click="handleNew" class="hidden">Nuevo tiempo</button>
       <div class="w-full">
-        <slot name="actions" />
-        <!-- <slot name="actions" store={{ isPaused, isResetting, handleStart, handlePause, disabled: isResetting || count===0,
-          }} /> -->
+        <slot name="actions"
+          v-bind="{ isPaused, isResetting, handleStart, handlePause, handleReset, disabled: isResetting || count === 0 }" />
       </div>
 
       <button :disabled="isResetting || count === 0" @click="handleStart" class="hidden" v-if="isPaused">
@@ -223,7 +222,7 @@ onUnmounted(() => {
       </button>
 
       <button @click="handleReset" class="hidden">Resetear</button>
-    </div>
+    </div> -->
   </main>
 </template>
 
