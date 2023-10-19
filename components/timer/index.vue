@@ -6,7 +6,7 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'count', payload: { time: number }): void;
+  (e: 'count', time: number): void;
   (e: 'new'): void;
   (e: 'formatted', time: string): void
 }
@@ -28,10 +28,8 @@ const s = computed(() => count.value - h.value * 3600 - m.value * 60);
 // $: s = count - h * 3600 - m * 60;
 
 watchEffect(() => {
-  if (count.value) {
-    emit('count', {
-      time: count.value,
-    });
+  if (typeof count.value === 'number') {
+    emit('count', count.value);
   }
 })
 
@@ -226,7 +224,7 @@ onUnmounted(() => {
   </main>
 </template>
 
-<style>
+<style scoped>
 main {
   padding: 0rem 1rem;
 }
