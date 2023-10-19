@@ -10,6 +10,9 @@ const consolesStore = useConsolesStore();
 const timeModal = ref(false);
 const selectedTime = ref('');
 const isCustomTime = ref(false);
+const isTransfer = ref(false);
+const currentActive = ref('');
+// const targetActive = ref('');
 
 const custom = ref({
   h: 0,
@@ -35,6 +38,7 @@ const activeConsoles = computed(() => consolesStore.consoles.filter(c => c.count
 const times: Record<string, number> = {
   '30s': 30,
   '1m': 1 * 60,
+  '20m': 20 * 60,
 }
 
 function openTimeModal() {
@@ -57,6 +61,12 @@ function setConsoleTime() {
     return c;
   })
   timeModal.value = false;
+}
+
+function transferTime() {
+  consolesStore.transferTime(currentActive.value, active.value);
+  isTransfer.value = false;
+  currentActive.value = '';
 }
 
 watch(activeConsoles, (consoles) => {
@@ -95,13 +105,15 @@ watch(activeConsoles, (consoles) => {
 <template>
   <section class="flex items-center gap-8 justify-center" ref="target">
     <div class="flex flex-col items-center" v-for="item in consolesStore.consoles" :key="item.id">
-      <button @click="active = item.id">
-        <UCard :ui="{ base: `border relative ${active === item.id ? 'border-pink-500' : 'border-transparent'}` }">
+      <button @click="active = item.id" :disabled="isTransfer && item.countdown > 0 || item.finished">
+        <UCard
+          :ui="{ base: `border relative ${active === item.id ? isTransfer ? 'border-green-400' : 'border-pink-500' : 'border-transparent'}` }">
           <div class="flex flex-col items-center w-[198px] h-[198px]" v-if="item.countdown > 0">
             <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time" />
           </div>
           <div class="flex flex-col items-center" v-else>
-            <component :is="getIcon(item.icon)" v-bind="{ class: 'fill-pink-500 w-[150px]' }" />
+            <component :is="getIcon(item.icon)"
+              v-bind="{ class: `${isTransfer && active === item.id ? 'fill-green-400' : !isTransfer && active === item.id ? 'fill-pink-500' : 'fill-gray-500'} w-[150px]` }" />
           </div>
           <div
             class="absolute w-full h-full left-0 top-0 flex justify-center items-center bg-black/20 rounded-md backdrop-blur-sm"
@@ -113,8 +125,21 @@ watch(activeConsoles, (consoles) => {
         </UCard>
       </button>
       <div class="mt-6">
+        <UBadge v-if="isTransfer && currentActive === item.id" variant="soft">Transfiriendo</UBadge>
+        <UBadge color="green" class="animate-pulse" variant="soft"
+          v-if="isTransfer && active !== item.id && !item.countdown && !item.finished">
+          Disponible</UBadge>
+        <UButton icon="i-ph-check-circle" size="xl" color="green" variant="ghost" @click="transferTime" title="Finalizar"
+          v-if="isTransfer && active === item.id" />
+
+        <!-- Normal -->
         <UButton icon="i-ph-clock-countdown" size="xl" variant="ghost" @click="openTimeModal"
-          :disabled="active !== item.id" v-if="!item.finished" />
+          :disabled="active !== item.id" v-if="!item.finished && !isTransfer" />
+        <UButton icon="i-ph-arrows-left-right" size="xl" variant="ghost" @click="() => {
+          isTransfer = true;
+          currentActive = item.id;
+          active = '';
+        }" v-if="!item.finished && active === item.id && item!.currentTime > 0" title="Transferir" />
         <UButton icon="i-ph-check-circle" class="animate-pulse" size="xl" color="green" variant="ghost"
           @click="consolesStore.resetData(item.id)" title="Finalizar" v-if="item.finished" />
         <UButton icon="i-ph-plus-circle-duotone" size="xl" variant="ghost" @click="openTimeModal" v-if="item.finished" />
@@ -125,7 +150,7 @@ watch(activeConsoles, (consoles) => {
         <h1 class="text-2xl mb-2">Selecciona el tiempo</h1>
         <USelectMenu v-model="selectedTime" :options="Object.keys(times)" :disabled="isCustomTime" />
 
-        <UCheckbox v-model="isCustomTime" class="my-4" name="Tiempo personalizado" label="Tiempo personalizado" />
+        <UCheckbox v-model="isCustomTime" class="my-4" name="Personalizar tiempo" label="Personalizar tiempo" />
 
         <div v-if="isCustomTime" class="flex gap-2">
           <UInput v-model="custom.h" placeholder="hh" :iu="{ base: 'w-10' }" />

@@ -69,6 +69,49 @@ export const useConsolesStore = defineStore("consoles-store", {
     selected: null,
   }),
   actions: {
+    transferTime(current: string, target: string) {
+      const toast = useToast();
+
+      const currentConsole = this.consoles.find((c) => c.id === current);
+
+      if (!currentConsole) {
+        toast.add({
+          color: "red",
+          title: "Transferencia",
+          description: "Consola no encontrada o no disponible",
+        });
+        return;
+      }
+
+      this.consoles = this.consoles.map((c) => {
+        // Reset current
+        if (c.id === current) {
+          return {
+            ...c,
+            futureTime: "",
+            currentTime: 0,
+            countdown: 0,
+          };
+        }
+
+        // Transfer to the target
+        if (c.id === target) {
+          return {
+            ...c,
+            futureTime: currentConsole.futureTime,
+            currentTime: currentConsole.currentTime,
+            countdown: currentConsole.currentTime as number,
+          };
+        }
+
+        return c;
+      });
+
+      toast.add({
+        title: "Transferencia",
+        description: "Realizada con éxito",
+      });
+    },
     resetData(id: string) {
       const toast = useToast();
 
