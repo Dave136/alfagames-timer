@@ -82,6 +82,7 @@ watch(activeConsoles, (consoles) => {
 
     if (isGreaterThenFuture) {
       item.finished = true;
+      new Audio('/sounds/mario-lost-life.mp3').play().catch(console.error);
     }
 
     item.currentTime = isGreaterThenFuture ? 0 : seconds;
@@ -135,12 +136,14 @@ watch(activeConsoles, (consoles) => {
 
         <!-- Normal -->
         <UButton icon="i-ph-clock-countdown" size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost"
-          @click="openTimeModal" :disabled="active !== item.id" v-if="!item.finished && !isTransfer" />
+          @click="openTimeModal" :disabled="active !== item.id"
+          v-if="!item.finished && !isTransfer && !item.countdown && !item.currentTime" />
         <UButton icon="i-ph-arrows-left-right" size="xl" variant="ghost" @click="() => {
           isTransfer = true;
           currentActive = item.id;
           active = '';
-        }" v-if="!item.finished && active === item.id && item!.currentTime > 0" title="Transferir" />
+        }" v-if="!item.finished && active === item.id && item.currentTime && item.currentTime > 0"
+          title="Transferir" />
         <UButton icon="i-ph-check-circle" class="animate-pulse" size="xl" color="green" variant="ghost"
           @click="consolesStore.resetData(item.id)" title="Finalizar" v-if="item.finished" />
         <UButton icon="i-ph-plus-circle-duotone" size="xl" variant="ghost" @click="openTimeModal" v-if="item.finished" />
