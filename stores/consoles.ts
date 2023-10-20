@@ -20,50 +20,50 @@ const DEFAULT_VALUES = {
   time: 0,
   countdown: 0,
   currentTime: 0,
-  formatted: "",
-  endedTime: "",
+  formatted: '',
+  endedTime: '',
   finished: false,
 };
 
 const initialConsolesState: Consoles[] = [
   {
-    id: "1",
+    id: '1',
     order: 1,
-    name: "Xbox 1",
-    icon: "i-xbox",
+    name: 'Xbox 1',
+    icon: 'i-xbox',
     countdown: 0,
   },
   {
-    id: "2",
+    id: '2',
     order: 2,
-    icon: "i-nintendo",
-    name: "Nintendo Switch",
+    icon: 'i-nintendo',
+    name: 'Nintendo Switch',
     countdown: 0,
   },
   {
-    id: "3",
+    id: '3',
     order: 3,
-    icon: "i-xbox",
-    name: "Xbox 2",
+    icon: 'i-xbox',
+    name: 'Xbox 2',
     countdown: 0,
   },
   {
-    id: "4",
+    id: '4',
     order: 4,
-    icon: "i-playstation",
-    name: "Playstation 5",
+    icon: 'i-playstation',
+    name: 'Playstation 5',
     countdown: 0,
   },
   {
-    id: "5",
+    id: '5',
     order: 5,
-    icon: "i-xbox",
-    name: "Xbox 3",
+    icon: 'i-xbox',
+    name: 'Xbox 3',
     countdown: 0,
   },
 ];
 
-export const useConsolesStore = defineStore("consoles-store", {
+export const useConsolesStore = defineStore('consoles-store', {
   state: (): ConsolesState => ({
     consoles: initialConsolesState,
     selected: null,
@@ -76,9 +76,9 @@ export const useConsolesStore = defineStore("consoles-store", {
 
       if (!currentConsole) {
         toast.add({
-          color: "red",
-          title: "Transferencia",
-          description: "Consola no encontrada o no disponible",
+          color: 'red',
+          icon: 'i-ph-x-circle-duotone',
+          title: 'Consola no encontrada o no disponible',
         });
         return;
       }
@@ -88,7 +88,7 @@ export const useConsolesStore = defineStore("consoles-store", {
         if (c.id === current) {
           return {
             ...c,
-            futureTime: "",
+            futureTime: '',
             currentTime: 0,
             countdown: 0,
           };
@@ -108,8 +108,9 @@ export const useConsolesStore = defineStore("consoles-store", {
       });
 
       toast.add({
-        title: "Transferencia",
-        description: "Realizada con éxito",
+        title: 'Tiempo transferido',
+        icon: 'i-ph-check-circle-duotone',
+        color: 'green',
       });
     },
     resetData(id: string) {
@@ -127,9 +128,9 @@ export const useConsolesStore = defineStore("consoles-store", {
       });
 
       toast.add({
-        icon: "i-ph-check-circle",
-        description: "Tiempo finalizado",
-        title: "Tiempo",
+        icon: 'i-ph-check-circle-duotone',
+        color: 'green',
+        title: 'Tiempo finalizado',
       });
     },
   },

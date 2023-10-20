@@ -64,6 +64,23 @@ function setConsoleTime() {
   timeModal.value = false;
 }
 
+function activeTransferMode(id: string) {
+  const isAvailableConsoles = consolesStore.consoles.filter(c => !c.countdown && !c.finished && !c.currentTime);
+
+  if (!isAvailableConsoles.length) {
+    useToast().add({
+      color: 'red',
+      icon: 'i-ph-warning-duotone',
+      title: 'No hay consolas disponibles',
+    });
+    return;
+  }
+
+  isTransfer.value = true;
+  currentActive.value = id;
+  active.value = '';
+}
+
 function transferTime() {
   consolesStore.transferTime(currentActive.value, active.value);
   isTransfer.value = false;
@@ -138,12 +155,8 @@ watch(activeConsoles, (consoles) => {
         <UButton icon="i-ph-clock-countdown" size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost"
           @click="openTimeModal" :disabled="active !== item.id"
           v-if="!item.finished && !isTransfer && !item.countdown && !item.currentTime" />
-        <UButton icon="i-ph-arrows-left-right" size="xl" variant="ghost" @click="() => {
-          isTransfer = true;
-          currentActive = item.id;
-          active = '';
-        }" v-if="!item.finished && active === item.id && item.currentTime && item.currentTime > 0"
-          title="Transferir" />
+        <UButton icon="i-ph-arrows-left-right" size="xl" variant="ghost" @click="activeTransferMode(item.id)"
+          v-if="!item.finished && active === item.id && item.currentTime && item.currentTime > 0" title="Transferir" />
         <UButton icon="i-ph-check-circle" class="animate-pulse" size="xl" color="green" variant="ghost"
           @click="consolesStore.resetData(item.id)" title="Finalizar" v-if="item.finished" />
         <UButton icon="i-ph-plus-circle-duotone" size="xl" variant="ghost" @click="openTimeModal" v-if="item.finished" />
