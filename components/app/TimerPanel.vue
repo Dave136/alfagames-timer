@@ -198,7 +198,8 @@ watch(activeConsoles, (consoles) => {
           </div>
         </div>
 
-        <UButton @click="setConsoleTime" class="mt-6" :disabled="!custom.h && (!custom.m || custom.m < MINIMAL_MIN_TIME)">
+        <UButton @click="setConsoleTime" class="mt-6"
+          :disabled="isCustomTime && !custom.h && (!custom.m || custom.m < MINIMAL_MIN_TIME)">
           Iniciar</UButton>
       </section>
     </UModal>
