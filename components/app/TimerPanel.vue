@@ -39,6 +39,7 @@ const times: Record<string, number> = {
   '30s': 30,
   '1m': 1 * 60,
   '20m': 20 * 60,
+  '1h': 60 * 60,
 }
 
 function openTimeModal() {
@@ -108,7 +109,7 @@ watch(activeConsoles, (consoles) => {
       <button @click="active = item.id" :disabled="isTransfer && item.countdown > 0 || item.finished">
         <UCard
           :ui="{ base: `border relative ${active === item.id ? isTransfer ? 'border-green-400' : 'border-pink-500' : 'border-transparent'}` }">
-          <div class="flex flex-col items-center w-[198px] h-[198px]" v-if="item.countdown > 0">
+          <div class="flex flex-col items-center w-[150px] h-[150px]" v-if="item.countdown > 0">
             <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time" />
           </div>
           <div class="flex flex-col items-center" v-else>
@@ -133,8 +134,8 @@ watch(activeConsoles, (consoles) => {
           v-if="isTransfer && active === item.id" />
 
         <!-- Normal -->
-        <UButton icon="i-ph-clock-countdown" size="xl" variant="ghost" @click="openTimeModal"
-          :disabled="active !== item.id" v-if="!item.finished && !isTransfer" />
+        <UButton icon="i-ph-clock-countdown" size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost"
+          @click="openTimeModal" :disabled="active !== item.id" v-if="!item.finished && !isTransfer" />
         <UButton icon="i-ph-arrows-left-right" size="xl" variant="ghost" @click="() => {
           isTransfer = true;
           currentActive = item.id;

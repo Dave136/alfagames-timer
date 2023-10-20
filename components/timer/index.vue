@@ -175,12 +175,12 @@ onUnmounted(() => {
         </Motion>
       </g>
 
-      <g fill="currentColor" text-anchor="middle" dominant-baseline="baseline" font-size="12">
+      <g fill="currentColor" text-anchor="middle" dominant-baseline="baseline" font-size="16">
         <text x="-3" y="6.5">
           <template v-for="[key, value], i in Object.entries({ h, m, s })" :key="key">
             <template v-if="countdown >= 60 ** (2 - i)">
               <tspan dx="3" font-weight="bold">{{ padValue(value) }}</tspan>
-              <tspan dx="0.5" font-size="6">{{ key }}</tspan>
+              <tspan dx="0.5" font-size="8">{{ key }}</tspan>
             </template>
           </template>
           <!-- {#each Object.entries({ h, m, s }) as [key, value], i}
@@ -225,9 +225,9 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-main {
+/* main {
   padding: 0rem 1rem;
-}
+} */
 
 main>svg {
   width: 100%;
