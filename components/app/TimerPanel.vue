@@ -2,6 +2,7 @@
 import dayjs from 'dayjs';
 
 const SECONDS = 1000;
+const MINIMAL_MIN_TIME = 15;
 
 const active = ref('');
 const target = ref(null);
@@ -15,9 +16,9 @@ const currentActive = ref('');
 // const targetActive = ref('');
 
 const custom = ref({
-  h: 0,
-  m: 0,
-  s: 0,
+  h: undefined,
+  m: undefined,
+  s: undefined,
 });
 
 const activeConsoles = computed(() => consolesStore.consoles.filter(c => c.countdown));
@@ -46,16 +47,25 @@ function openTimeModal() {
   timeModal.value = true;
 }
 
+function getCustomTime() {
+  const { h = 0, m = 0, s = 0 } = custom.value;
+  const hours = h * 60 * 60
+  const min = m * 60
+  const sec = s;
+
+  return hours + min + sec;
+}
+
 function setConsoleTime() {
-  // consolesStore.consoles.find(c => c.id === active.value)!.countdown = isCustomTime.value ? 60 : times[selectedTime.value];
   consolesStore.consoles = consolesStore.consoles.map((c) => {
     if (c.id === active.value) {
       const now = new Date().toString();
+      const time = isCustomTime.value ? getCustomTime() : times[selectedTime.value];
 
       return {
         ...c,
-        countdown: isCustomTime.value ? 60 : times[selectedTime.value],
-        futureTime: dayjs(now).add(times[selectedTime.value], 's').toString(),
+        countdown: time,
+        futureTime: dayjs(now).add(time, 's').toString(),
       }
     }
 
@@ -163,21 +173,33 @@ watch(activeConsoles, (consoles) => {
       </div>
     </div>
     <UModal v-model="timeModal">
-      <section class="p-6">
-        <h1 class="text-2xl mb-2">Selecciona el tiempo</h1>
+      <section class="p-8">
+        <h1 class="text-2xl mb-8">Selecciona el tiempo</h1>
         <USelectMenu v-model="selectedTime" :options="Object.keys(times)" :disabled="isCustomTime" />
 
-        <UCheckbox v-model="isCustomTime" class="my-4" name="Personalizar tiempo" label="Personalizar tiempo" />
+        <UCheckbox v-model="isCustomTime" class="my-8" name="Personalizar" label="Personalizar" />
 
-        <div v-if="isCustomTime" class="flex gap-2">
-          <UInput v-model="custom.h" placeholder="hh" :iu="{ base: 'w-10' }" />
-          :
-          <UInput v-model="custom.m" placeholder="mm" :iu="{ base: 'w-10' }" />
-          :
-          <UInput v-model="custom.s" placeholder="ss" :iu="{ base: 'w-10' }" />
+        <div v-if="isCustomTime" class="flex flex-col gap-2">
+          <UAlert title="Atención" color="orange" description="El tiempo mínimo son 15min" variant="soft"
+            icon="i-ph-warning-duotone" />
+
+          <div class="flex gap-2 mt-4">
+            <UFormGroup>
+              <UInput v-model="custom.h" placeholder="hh" :iu="{ base: 'w-10' }" />
+            </UFormGroup>
+            <div>:</div>
+            <UFormGroup required>
+              <UInput v-model="custom.m" placeholder="mm" :iu="{ base: 'w-10' }" />
+            </UFormGroup>
+            <div>:</div>
+            <UFormGroup>
+              <UInput v-model="custom.s" placeholder="ss" :iu="{ base: 'w-10' }" />
+            </UFormGroup>
+          </div>
         </div>
 
-        <UButton @click="setConsoleTime" class="mt-6">Iniciar</UButton>
+        <UButton @click="setConsoleTime" class="mt-6" :disabled="!custom.h && (!custom.m || custom.m < MINIMAL_MIN_TIME)">
+          Iniciar</UButton>
       </section>
     </UModal>
   </section>
