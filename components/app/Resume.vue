@@ -12,13 +12,15 @@ const consoleStore = useConsolesStore();
           v-if="consoleStore.selected?.icon" />
       </header>
       <div class="w-full flex flex-col mt-6">
-        <p class="text-gray-500" v-if="!consoleStore.selected?.id">Selecciona una consola</p>
+        <p class="text-gray-500 text-center" v-if="!consoleStore.selected?.id">Selecciona una consola</p>
 
-        <p class="text-lg mb-2"><span class="text-gray-500 font-bold mr-4">Hora de
-            finalización:</span> {{
-              dayjs(consoleStore.selected?.futureTime).format('hh:mm a') }}</p>
-        <p class="text-lg"><span class="text-gray-500 font-bold mr-4">Tiempo:</span> {{
-          consoleStore.selected?.formatted }}</p>
+        <div v-else>
+          <p class="text-lg mb-2"><span class="text-gray-500 font-bold mr-4">Hora de
+              finalización:</span> {{
+                dayjs(consoleStore.selected?.futureTime).format('hh:mm a') }}</p>
+          <p class="text-lg"><span class="text-gray-500 font-bold mr-4">Tiempo:</span> {{
+            consoleStore.selected?.formatted }}</p>
+        </div>
       </div>
     </div>
   </div>
