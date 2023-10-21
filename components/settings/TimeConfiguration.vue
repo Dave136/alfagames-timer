@@ -11,7 +11,6 @@ const time = reactive<Record<string, number | undefined>>({
 
 const itemId = ref('');
 const isDelete = ref(false);
-const isEditing = ref(false);
 
 const hh = computed<number>(() => time?.h || 0);
 const mm = computed<number>(() => time?.m || 0);
@@ -119,6 +118,21 @@ function saveEditedTime() {
     color: 'green'
   });
 }
+
+function deleteTime(row: Time) {
+  if (isDelete.value && row.id === itemId.value) {
+    appStore.times = appStore.times.filter((t) => t.id !== row.id);
+    useToast().add({
+      icon: 'i-ph-check',
+      title: 'Tiempo eliminado',
+      color: 'green'
+    });
+    return;
+  }
+
+  isDelete.value = true;
+  itemId.value = row.id;
+}
 </script>
 
 <template>
@@ -135,7 +149,9 @@ function saveEditedTime() {
         <UTable :rows="appStore.times" :columns="columns">
           <template #actions-data="{ row }">
             <UButton color="green" variant="ghost" icon="i-ph-pencil-duotone" @click="editTime(row)" />
-            <UButton color="red" variant="ghost" icon="i-ph-trash-duotone" />
+            <UButton color="red" variant="ghost"
+              :icon="isDelete && itemId === row.id ? 'i-ph-check-duotone' : 'i-ph-trash-duotone'"
+              @click="deleteTime(row)" />
           </template>
         </UTable>
       </section>
