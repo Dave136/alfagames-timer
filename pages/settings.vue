@@ -5,6 +5,7 @@
 
     <div class="grid grid-cols-3 mt-8 gap-8 mr-20">
       <SettingsTimeConfiguration />
+      <SettingsRingtone />
     </div>
   </section>
 </template>
