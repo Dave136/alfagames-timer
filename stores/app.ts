@@ -1,10 +1,3 @@
-interface Time {
-  id: string;
-  label: string;
-  value: string;
-  raw: number;
-}
-
 type State = {
   times: Time[];
 };

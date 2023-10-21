@@ -3,11 +3,18 @@ const appStore = useAppStore();
 
 const label = ref('');
 const mode = ref<'creation' | 'editing' | 'normal'>('normal');
-const time = reactive({
+const time = reactive<Record<string, number | undefined>>({
   h: undefined,
   m: undefined,
-  s: undefined,
+  // s: undefined,
 });
+
+const itemId = ref('');
+const isDelete = ref(false);
+const isEditing = ref(false);
+
+const hh = computed<number>(() => time?.h || 0);
+const mm = computed<number>(() => time?.m || 0);
 
 const columns = [
   {
@@ -26,6 +33,92 @@ const columns = [
     key: 'actions'
   }
 ];
+
+function getTimeValue() {
+  if (!hh.value && mm.value) {
+    return `${mm.value.toString().padStart(2, '0')}m`;
+  }
+
+  return `${hh.value}h ${mm.value.toString().padStart(2, '0')}m`;
+}
+
+function validate(): boolean {
+  if (!label.value) {
+    useToast().add({
+      icon: 'i-ph-warning-duotone',
+      title: 'Debe ingresar una etiqueta',
+      color: 'orange'
+    });
+    return false;
+  }
+
+  if (!hh.value && !mm.value) {
+    useToast().add({
+      icon: 'i-ph-warning-duotone',
+      title: 'Debe ingresar el tiempo',
+      color: 'orange'
+    });
+    return false;
+  }
+
+  return true;
+}
+
+function saveNewTime() {
+  if (!validate()) return;
+
+  const newTime = {
+    id: String(appStore.times.length + 1),
+    label: label.value,
+    value: getTimeValue(),
+    raw: hh.value * 60 * 60 + mm.value * 60,
+  };
+
+  appStore.times.push(newTime);
+  mode.value = 'normal';
+
+  useToast().add({
+    icon: 'i-ph-check',
+    title: 'Tiempo agregado',
+    color: 'green'
+  });
+}
+
+function timeStringToNumber(item: string, time: 'h' | 'm'): number {
+  return +item.split(' ').find((val: string) => val.includes(time))!.replace(time, '')
+}
+
+function editTime(row: Time) {
+  mode.value = 'editing';
+  itemId.value = row.id;
+  label.value = row.label;
+  time.h = timeStringToNumber(row.value, 'h')
+  time.m = timeStringToNumber(row.value, 'm')
+}
+
+function saveEditedTime() {
+  if (!validate()) return;
+
+  appStore.times = appStore.times.map((t) => {
+    if (t.id === itemId.value) {
+      return {
+        ...t,
+        label: label.value,
+        value: getTimeValue(),
+        raw: hh.value * 60 * 60 + mm.value * 60,
+      }
+    }
+
+    return t;
+  });
+
+  mode.value = 'normal';
+  useToast().add({
+    icon: 'i-ph-check',
+    title: 'Tiempo editado',
+    color: 'green'
+  });
+}
 </script>
 
 <template>
@@ -41,7 +134,7 @@ const columns = [
       <section>
         <UTable :rows="appStore.times" :columns="columns">
           <template #actions-data="{ row }">
-            <UButton color="green" variant="ghost" icon="i-ph-pencil-duotone" />
+            <UButton color="green" variant="ghost" icon="i-ph-pencil-duotone" @click="editTime(row)" />
             <UButton color="red" variant="ghost" icon="i-ph-trash-duotone" />
           </template>
         </UTable>
@@ -58,22 +151,22 @@ const columns = [
             </UFormGroup>
             <div>-</div>
             <UFormGroup>
-              <UInput v-model="time.h" placeholder="hh" :iu="{ base: 'w-10' }" />
+              <UInput v-model.number="time.h" placeholder="hh" :iu="{ base: 'w-10' }" />
             </UFormGroup>
             <div>:</div>
             <UFormGroup required>
-              <UInput v-model="time.m" placeholder="mm" :iu="{ base: 'w-10' }" />
-            </UFormGroup>
-            <div>:</div>
-            <UFormGroup>
-              <UInput v-model="time.s" placeholder="ss" :iu="{ base: 'w-10' }" />
+              <UInput v-model.number="time.m" placeholder="mm" :iu="{ base: 'w-10' }" />
             </UFormGroup>
           </div>
         </div>
       </section>
 
       <section class="mt-6 flex gap-2 justify-end" v-if="['creation', 'editing'].includes(mode)">
-        <UButton color="cyan" variant="soft" icon="i-ph-floppy-disk">Guardar</UButton>
+        <UButton color="cyan" variant="soft" icon="i-ph-floppy-disk" @click="saveNewTime" v-if="mode === 'creation'">
+          Guardar</UButton>
+        <UButton color="cyan" variant="soft" icon="i-ph-floppy-disk" @click="saveEditedTime" v-if="mode === 'editing'">
+          Guardar
+        </UButton>
         <UButton color="red" variant="ghost" icon="i-ph-x" @click="mode = 'normal'">Cancelar</UButton>
       </section>
     </UCard>
