@@ -13,7 +13,8 @@ const links = [
 
     <div class="h-full flex flex-col justify-between">
       <NuxtLink v-for="link in links" :key="link.name" :to="link.href">
-        <UButton :icon="link.icon" size="xl" :color="$route.path === link.href ? 'pink' : 'gray'" variant="ghost" />
+        <UButton :icon="link.icon" size="xl" :color="$route.path === link.href ? 'pink' : 'gray'"
+          :variant="$route.path === link.href ? 'soft' : 'ghost'" />
       </NuxtLink>
     </div>
   </aside>
