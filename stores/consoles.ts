@@ -109,7 +109,7 @@ export const useConsolesStore = defineStore('consoles-store', {
 
       toast.add({
         title: 'Tiempo transferido',
-        icon: 'i-ph-check-circle-duotone',
+        icon: 'i-ph-check',
         color: 'green',
       });
     },
@@ -128,7 +128,7 @@ export const useConsolesStore = defineStore('consoles-store', {
       });
 
       toast.add({
-        icon: 'i-ph-check-circle-duotone',
+        icon: 'i-ph-check',
         color: 'green',
         title: 'Tiempo finalizado',
       });
