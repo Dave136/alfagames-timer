@@ -35,7 +35,7 @@ const columns = [
 
 function getTimeValue() {
   if (!hh.value && mm.value) {
-    return `${mm.value.toString().padStart(2, '0')}m`;
+    return `${mm.value}m`;
   }
 
   return `${hh.value}h ${mm.value.toString().padStart(2, '0')}m`;
@@ -133,6 +133,13 @@ function deleteTime(row: Time) {
   isDelete.value = true;
   itemId.value = row.id;
 }
+
+watch(isDelete, () => {
+  setTimeout(() => {
+    isDelete.value = false;
+    itemId.value = '';
+  }, 4000);
+})
 </script>
 
 <template>
