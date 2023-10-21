@@ -24,10 +24,11 @@ const custom = ref({
 
 const activeConsoles = computed(() => consolesStore.consoles.filter(c => c.countdown));
 
-// onClickOutside(target, () => {
-//   active.value = '';
-//   appStore.consoleSelected = {};
-// });
+onClickOutside(target, () => {
+  if (timeModal.value) return;
+  active.value = '';
+  consolesStore.selected = null;
+});
 
 // const times: Record<string, number> = {
 //   '20m': 20 * 60,
