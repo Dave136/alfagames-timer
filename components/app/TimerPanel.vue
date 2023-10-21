@@ -7,9 +7,10 @@ const MINIMAL_MIN_TIME = 15;
 const active = ref('');
 const target = ref(null);
 const consolesStore = useConsolesStore();
+const appStore = useAppStore();
 
 const timeModal = ref(false);
-const selectedTime = ref('');
+const selectedTime = ref<Time>();
 const isCustomTime = ref(false);
 const isTransfer = ref(false);
 const currentActive = ref('');
@@ -60,7 +61,7 @@ function setConsoleTime() {
   consolesStore.consoles = consolesStore.consoles.map((c) => {
     if (c.id === active.value) {
       const now = new Date().toString();
-      const time = isCustomTime.value ? getCustomTime() : times[selectedTime.value];
+      const time = isCustomTime.value ? getCustomTime() : selectedTime.value!.raw;
 
       return {
         ...c,
@@ -175,7 +176,7 @@ watch(activeConsoles, (consoles) => {
     <UModal v-model="timeModal">
       <section class="p-8">
         <h1 class="text-2xl mb-8">Selecciona el tiempo</h1>
-        <USelectMenu v-model="selectedTime" :options="Object.keys(times)" :disabled="isCustomTime" />
+        <USelectMenu v-model="selectedTime" :options="appStore.times" :disabled="isCustomTime" />
 
         <UCheckbox v-model="isCustomTime" class="my-8" name="Personalizar" label="Personalizar" />
 
