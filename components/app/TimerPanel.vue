@@ -137,11 +137,13 @@ watch(activeConsoles, (consoles) => {
 <template>
   <section class="flex items-center gap-8 justify-center" ref="target">
     <div class="flex flex-col items-center" v-for="item in consolesStore.consoles" :key="item.id">
-      <button @click="active = item.id" :disabled="isTransfer && item.countdown > 0 || item.finished">
+      <button @click="(active = item.id) && (consolesStore.selected = item)"
+        :disabled="isTransfer && item.countdown > 0 || item.finished">
         <UCard
           :ui="{ base: `border relative ${active === item.id ? isTransfer ? 'border-green-400' : 'border-pink-500' : 'border-transparent'}` }">
           <div class="flex flex-col items-center w-[150px] h-[150px]" v-if="item.countdown > 0">
-            <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time" />
+            <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time"
+              @formatted="(time) => item.formatted = time" />
           </div>
           <div class="flex flex-col items-center" v-else>
             <component :is="getIcon(item.icon)"
