@@ -8,6 +8,7 @@ const active = ref('');
 const target = ref(null);
 const consolesStore = useConsolesStore();
 const appStore = useAppStore();
+const soundsStore = useSoundsStore();
 
 const timeModal = ref(false);
 const selectedTime = ref<Time>();
@@ -111,7 +112,7 @@ watch(activeConsoles, (consoles) => {
 
     if (isGreaterThenFuture) {
       item.finished = true;
-      new Audio('/sounds/mario-lost-life.mp3').play().catch(console.error);
+      new Audio(soundsStore.selected?.path).play().catch(console.error);
     }
 
     item.currentTime = isGreaterThenFuture ? 0 : seconds;

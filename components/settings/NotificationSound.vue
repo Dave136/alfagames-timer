@@ -10,7 +10,8 @@ const currentAudio = ref<HTMLAudioElement | null>(null);
 const sounds = computed(() => soundsStore.sounds);
 const defaultSound = ref('');
 
-onClickOutside(cardRef, () => {
+onClickOutside(cardRef, (e) => {
+  if (e.type === 'click') return;
   soundSelected.value = '';
   active.value = '';
 });
