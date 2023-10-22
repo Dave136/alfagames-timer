@@ -25,8 +25,6 @@ const custom = ref({
   s: undefined,
 });
 
-const notificationPosition = inject('notificationPosition') as Ref<NotificationPosition>;
-
 const activeConsoles = computed(() => consolesStore.consoles.filter(c => c.countdown));
 const freeConsoles = computed(() => consolesStore.consoles.filter(c => !c.countdown && !c.finished && !c.currentTime));
 
