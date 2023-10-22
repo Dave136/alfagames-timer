@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
+import { Presence, Motion } from 'motion/vue';
 
 const SECONDS = 1000;
 const MINIMAL_MIN_TIME = 15;
@@ -135,11 +136,13 @@ watch(activeConsoles, (consoles) => {
 
     if (isGreaterThenFuture) {
       item.finished = true;
+      isTransfer.value = false;
       playSound(soundsStore.selected?.path);
     }
 
     item.currentTime = isGreaterThenFuture ? 0 : seconds;
     item.countdown = isGreaterThenFuture ? 0 : item.countdown;
+    // item.countdown = isGreaterThenFuture ? 0 : item.countdown;
   });
 
   updated.forEach((item: any) => {
@@ -155,39 +158,10 @@ watch(activeConsoles, (consoles) => {
     });
   });
 }, { deep: true });
-
-watch(isTransfer, () => {
-  if (!isTransfer.value) return;
-
-  notificationPosition.value = 'bottom-center';
-
-  useToast().add({
-    timeout: 0,
-    closeButton: null as unknown as undefined,
-    icon: 'i-ph-arrows-left-right',
-    title: 'Transfiriendo...',
-    actions: [
-      {
-        label: 'Cancelar',
-        variant: 'soft',
-        color: 'red',
-        icon: 'i-ph-x-circle-duotone',
-        click: () => {
-          isTransfer.value = false;
-          active.value = '';
-          currentActive.value = '';
-          consolesStore.selected = null;
-          notificationPosition.value = 'bottom-right';
-        },
-      }
-    ]
-  });
-})
-
 </script>
 
 <template>
-  <section class="flex items-center gap-8 justify-center" ref="target">
+  <section class="flex items-center gap-8 justify-center overflow-hidden" ref="target">
     <div class="flex flex-col items-center" v-for="item in consolesStore.consoles" :key="item.id">
       <button @click="(active = item.id) && (consolesStore.selected = item)"
         :disabled="isTransfer && item.countdown > 0 || item.finished">
@@ -265,5 +239,20 @@ watch(isTransfer, () => {
           Iniciar</UButton>
       </section>
     </UModal>
+
+    <Presence>
+      <Motion class="absolute left-0 right-0 mx-auto bottom-0" v-if="isTransfer"
+        :initial="{ position: 'absolute', opacity: 0, y: 100 }" :animate="{ opacity: 1, y: 0 }" :exit="{ y: 100 }">
+        <div
+          class="absolute text-left overflow-hidden w-full !max-w-sm bg-white dark:bg-gray-900 sm:max-w-lg rounded-lg sm:my-8 shadow-xl mx-auto left-0 right-0 bottom-0">
+          <section class="p-4 flex items-center">
+            <UIcon name="i-ph-arrows-left-right" class="text-pink-400 text-xl" />
+            <span class="mx-4 flex-1">Transfiriendo...</span>
+            <UButton icon="i-ph-x-circle-duotone" color="red" variant="soft" label="Cancelar"
+              @click="(isTransfer = false) && (currentActive = '')" />
+          </section>
+        </div>
+      </Motion>
+    </Presence>
   </section>
 </template>
