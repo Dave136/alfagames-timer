@@ -2,22 +2,22 @@ const soundsList: Sound[] = [
   {
     id: '1',
     name: 'Good bad ugly',
-    path: '/sounds/good-bad-ugly-ring.mp3',
+    path: 'good-bad-ugly-ring.mp3',
   },
   {
     id: '2',
     name: 'Mario Lost Life',
-    path: '/sounds/mario-lost-life.mp3',
+    path: 'mario-lost-life.mp3',
   },
   {
     id: '3',
     name: 'Nani full',
-    path: '/sounds/nani-full.mp3',
+    path: 'nani-full.mp3',
   },
   {
     id: '4',
     name: 'Ultra instinct',
-    path: '/sounds/ultra-instinct.mp3',
+    path: 'ultra-instinct.mp3',
   },
 ];
 

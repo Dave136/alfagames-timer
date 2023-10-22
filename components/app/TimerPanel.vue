@@ -100,6 +100,22 @@ function transferTime() {
   currentActive.value = '';
 }
 
+async function playSound() {
+  try {
+    const { invoke } = await import('@tauri-apps/api')
+    await invoke('play_sound', {
+      path: soundsStore.selected?.path
+    });
+  } catch (error) {
+    console.error(error);
+    useToast().add({
+      icon: 'i-ph-warning-duotone',
+      title: 'No se pudo reproducir el sonido',
+      color: 'red'
+    })
+  }
+}
+
 watch(activeConsoles, (consoles) => {
   const updated = consoles.map((item) => {
     const now = new Date();
@@ -112,7 +128,7 @@ watch(activeConsoles, (consoles) => {
 
     if (isGreaterThenFuture) {
       item.finished = true;
-      new Audio(soundsStore.selected?.path).play().catch(console.error);
+      playSound();
     }
 
     item.currentTime = isGreaterThenFuture ? 0 : seconds;
