@@ -134,4 +134,7 @@ export const useConsolesStore = defineStore('consoles-store', {
       });
     },
   },
+  persist: {
+    storage: persistedState.localStorage,
+  },
 });

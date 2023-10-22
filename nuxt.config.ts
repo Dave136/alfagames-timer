@@ -2,7 +2,13 @@
 export default defineNuxtConfig({
   ssr: false,
   devtools: { enabled: true },
-  modules: ['@pinia/nuxt', '@nuxt/ui', '@vueuse/nuxt', '@pinia/nuxt'],
+  modules: [
+    '@pinia/nuxt',
+    '@nuxt/ui',
+    '@vueuse/nuxt',
+    '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
+  ],
   ui: {
     global: true,
     icons: ['ph', 'heroicons'],

@@ -31,4 +31,7 @@ export const useSoundsStore = defineStore('sounds-store', {
     sounds: soundsList,
     selected: soundsList[1],
   }),
+  persist: {
+    storage: persistedState.localStorage,
+  },
 });

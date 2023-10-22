@@ -25,4 +25,7 @@ export const useAppStore = defineStore('app-store', {
       },
     ],
   }),
+  persist: {
+    storage: persistedState.localStorage,
+  },
 });
