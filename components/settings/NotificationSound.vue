@@ -50,11 +50,6 @@ onMounted(() => {
 });
 
 const unlisten = await listen('ended-sound', (event) => {
-  console.log({
-    event: event.event,
-    payload: event.payload
-  });
-
   isPlaying.value = !event.payload as boolean;
   active.value = '';
 });
