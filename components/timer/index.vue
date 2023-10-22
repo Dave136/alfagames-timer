@@ -134,6 +134,12 @@ watchEffect(() => {
 onUnmounted(() => {
   clearInterval(interval.value)
 })
+
+defineExpose({
+  handleStart,
+  handlePause,
+  isPaused,
+});
 </script>
 
 <template>

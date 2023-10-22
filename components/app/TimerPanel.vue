@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
+import { VNodeRef } from 'vue';
 
 const SECONDS = 1000;
 const MINIMAL_MIN_TIME = 15;
@@ -16,6 +17,8 @@ const isCustomTime = ref(false);
 const isTransfer = ref(false);
 const currentActive = ref('');
 // const targetActive = ref('');
+
+const timers = ref<Record<any, any>>({});
 
 const custom = ref({
   h: undefined,
@@ -101,6 +104,16 @@ function transferTime() {
   currentActive.value = '';
 }
 
+function togglePause(id: string) {
+  if (timers.value[id].isPaused) {
+    timers.value[id].handleStart();
+    return;
+  }
+
+  timers.value[id].handlePause()
+  console.log(timers.value[id])
+}
+
 watch(activeConsoles, (consoles) => {
   const updated = consoles.map((item) => {
     const now = new Date();
@@ -133,6 +146,10 @@ watch(activeConsoles, (consoles) => {
     })
   })
 }, { deep: true });
+
+watch(timers, (time) => {
+  console.log(time)
+})
 </script>
 
 <template>
@@ -144,7 +161,7 @@ watch(activeConsoles, (consoles) => {
           :ui="{ base: `border relative ${active === item.id ? isTransfer ? 'border-green-400' : 'border-pink-500' : 'border-transparent'}` }">
           <div class="flex flex-col items-center w-[150px] h-[150px]" v-if="item.countdown > 0">
             <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time"
-              @formatted="(time) => item.formatted = time" />
+              @formatted="(time) => item.formatted = time" :ref="(el) => el && (timers[item.id] = el)" />
           </div>
           <div class="flex flex-col items-center" v-else>
             <component :is="getIcon(item.icon)"
@@ -168,6 +185,10 @@ watch(activeConsoles, (consoles) => {
           title="Seleccionar" v-if="isTransfer && active === item.id" />
 
         <!-- Normal -->
+        <UButton
+          :icon="timers[item.id] && timers[item.id].isPaused ? 'i-ph-play-circle-duotone' : 'i-ph-pause-circle-duotone'"
+          size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost" @click="togglePause(item.id)"
+          v-if="!item.finished && item.currentTime && item.countdown" />
         <UButton icon="i-ph-clock-countdown" size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost"
           @click="openTimeModal" :disabled="active !== item.id"
           v-if="!item.finished && !isTransfer && !item.countdown && !item.currentTime" />
