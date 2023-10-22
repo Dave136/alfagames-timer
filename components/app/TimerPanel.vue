@@ -24,6 +24,8 @@ const custom = ref({
   s: undefined,
 });
 
+const notificationPosition = inject('notificationPosition') as Ref<NotificationPosition>;
+
 const activeConsoles = computed(() => consolesStore.consoles.filter(c => c.countdown));
 const freeConsoles = computed(() => consolesStore.consoles.filter(c => !c.countdown && !c.finished && !c.currentTime));
 
@@ -153,6 +155,35 @@ watch(activeConsoles, (consoles) => {
     });
   });
 }, { deep: true });
+
+watch(isTransfer, () => {
+  if (!isTransfer.value) return;
+
+  notificationPosition.value = 'bottom-center';
+
+  useToast().add({
+    timeout: 0,
+    closeButton: null as unknown as undefined,
+    icon: 'i-ph-arrows-left-right',
+    title: 'Transfiriendo...',
+    actions: [
+      {
+        label: 'Cancelar',
+        variant: 'soft',
+        color: 'red',
+        icon: 'i-ph-x-circle-duotone',
+        click: () => {
+          isTransfer.value = false;
+          active.value = '';
+          currentActive.value = '';
+          consolesStore.selected = null;
+          notificationPosition.value = 'bottom-right';
+        },
+      }
+    ]
+  });
+})
+
 </script>
 
 <template>
@@ -191,12 +222,13 @@ watch(activeConsoles, (consoles) => {
         <UButton
           :icon="timers[item.id] && timers[item.id].isPaused ? 'i-ph-play-circle-duotone' : 'i-ph-pause-circle-duotone'"
           size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost" @click="togglePause(item.id)"
-          v-if="!item.finished && item.currentTime && item.countdown" />
+          v-if="!isTransfer && !item.finished && item.currentTime && item.countdown" />
         <UButton icon="i-ph-clock-countdown" size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost"
           @click="openTimeModal" :disabled="active !== item.id"
           v-if="!item.finished && !isTransfer && !item.countdown && !item.currentTime" />
-        <UButton icon="i-ph-arrows-left-right" size="xl" variant="ghost" @click="activeTransferMode(item.id)"
-          v-if="!item.finished && item.currentTime && item.currentTime > 0" title="Transferir" />
+        <UButton icon="i-ph-arrows-left-right" size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost"
+          @click="activeTransferMode(item.id)"
+          v-if="!isTransfer && !item.finished && item.currentTime && item.currentTime > 0" title="Transferir" />
         <UButton icon="i-ph-check-circle" class="animate-pulse" size="xl" color="green" variant="ghost"
           @click="consolesStore.resetData(item.id)" title="Finalizar" v-if="item.finished" />
         <UButton icon="i-ph-plus-circle-duotone" size="xl" variant="ghost" @click="openTimeModal" v-if="item.finished" />
