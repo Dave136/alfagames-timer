@@ -2,11 +2,12 @@
 import { Motion } from 'motion/vue';
 const soundsStore = useSoundsStore();
 
+const { listen } = await import('@tauri-apps/api/event');
+
 const cardRef = ref(null);
 const isPlaying = ref(false);
 const active = ref('');
 const soundSelected = ref('');
-const currentAudio = ref<HTMLAudioElement | null>(null);
 const sounds = computed(() => soundsStore.sounds);
 const defaultSound = ref('');
 
@@ -29,43 +30,16 @@ function setSound() {
   });
 }
 
-function playSound(item: Sound) {
-  let audio;
+async function playSoundAction(sound: Sound) {
+  if (isPlaying.value) return;
+
   try {
     isPlaying.value = true;
-    active.value = item.id;
-
-    if (currentAudio.value && currentAudio.value.getAttribute('id') === item.id) {
-      audio = currentAudio.value;
-    } else {
-      if (currentAudio.value) {
-        currentAudio.value.pause();
-        currentAudio.value.currentTime = 0;
-        currentAudio.value = null;
-      }
-
-      audio = new Audio(item.path);
-      audio.setAttribute('id', item.id);
-      currentAudio.value = audio;
-    }
-
-    if (audio.paused) {
-      audio.play();
-    } else {
-      audio.pause();
-      audio.currentTime = 0;
-      isPlaying.value = false;
-      active.value = '';
-      currentAudio.value = null;
-    }
-
-    audio.onended = () => {
-      isPlaying.value = false;
-      active.value = '';
-    }
-
+    active.value = sound.id
+    await playSound(sound.path);
   } catch (error) {
-    console.error(error);
+    console.log(error);
+    isPlaying.value = false;
   }
 }
 
@@ -74,6 +48,20 @@ onMounted(() => {
     defaultSound.value = soundsStore.selected.id;
   }
 });
+
+const unlisten = await listen('ended-sound', (event) => {
+  console.log({
+    event: event.event,
+    payload: event.payload
+  });
+
+  isPlaying.value = !event.payload as boolean;
+  active.value = '';
+});
+
+onUnmounted(() => {
+  unlisten();
+})
 </script>
 
 <template>
@@ -107,7 +95,7 @@ onMounted(() => {
                 :color="soundSelected === sound.id ? 'green' : defaultSound === sound.id ? 'pink' : active === sound.id && isPlaying ? 'green' : 'gray'"
                 variant="ghost"
                 :icon="active === sound.id && isPlaying ? 'i-ph-stop-circle-duotone' : 'i-ph-play-circle-duotone'"
-                @click.prevent="playSound(sound)" />
+                :disabled="isPlaying" @click.prevent="playSoundAction(sound)" />
             </div>
           </button>
         </div>

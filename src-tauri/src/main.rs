@@ -4,6 +4,7 @@
 use std::{fs::File, io::BufReader};
 
 use rodio::Source;
+use tauri::Window;
 
 const PATH: &'static str = "../public/sounds/";
 
@@ -13,16 +14,18 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-fn play_sound(path: &str) {
+fn play_sound(path: &str, window: Window) {
     let file = File::open(format!("{}{}", PATH, path)).unwrap();
 
-    std::thread::spawn(|| {
+    std::thread::spawn(move || {
         let src = rodio::Decoder::new(BufReader::new(file)).unwrap();
         let (_stream, handle) = rodio::OutputStream::try_default().unwrap();
         let sink = rodio::Sink::try_new(&handle).unwrap();
         sink.append(src);
 
         sink.sleep_until_end();
+
+        window.emit("ended-sound", true).unwrap();
     });
 }
 
