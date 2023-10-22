@@ -24,6 +24,7 @@ const custom = ref({
 });
 
 const activeConsoles = computed(() => consolesStore.consoles.filter(c => c.countdown));
+const freeConsoles = computed(() => consolesStore.consoles.filter(c => !c.countdown && !c.finished && !c.currentTime));
 
 onClickOutside(target, () => {
   if (timeModal.value) return;
@@ -78,9 +79,7 @@ function setConsoleTime() {
 }
 
 function activeTransferMode(id: string) {
-  const isAvailableConsoles = consolesStore.consoles.filter(c => !c.countdown && !c.finished && !c.currentTime);
-
-  if (!isAvailableConsoles.length) {
+  if (!freeConsoles.value.length) {
     useToast().add({
       color: 'red',
       icon: 'i-ph-warning-duotone',
@@ -163,15 +162,15 @@ watch(activeConsoles, (consoles) => {
         <UBadge color="green" class="animate-pulse" variant="soft"
           v-if="isTransfer && active !== item.id && !item.countdown && !item.finished">
           Disponible</UBadge>
-        <UButton icon="i-ph-check-circle" size="xl" color="green" variant="ghost" @click="transferTime" title="Finalizar"
-          v-if="isTransfer && active === item.id" />
+        <UButton icon="i-ph-check-circle" size="xl" color="green" variant="ghost" @click="transferTime"
+          title="Seleccionar" v-if="isTransfer && active === item.id" />
 
         <!-- Normal -->
         <UButton icon="i-ph-clock-countdown" size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost"
           @click="openTimeModal" :disabled="active !== item.id"
           v-if="!item.finished && !isTransfer && !item.countdown && !item.currentTime" />
         <UButton icon="i-ph-arrows-left-right" size="xl" variant="ghost" @click="activeTransferMode(item.id)"
-          v-if="!item.finished && active === item.id && item.currentTime && item.currentTime > 0" title="Transferir" />
+          v-if="!item.finished && item.currentTime && item.currentTime > 0" title="Transferir" />
         <UButton icon="i-ph-check-circle" class="animate-pulse" size="xl" color="green" variant="ghost"
           @click="consolesStore.resetData(item.id)" title="Finalizar" v-if="item.finished" />
         <UButton icon="i-ph-plus-circle-duotone" size="xl" variant="ghost" @click="openTimeModal" v-if="item.finished" />
