@@ -68,7 +68,7 @@ onUnmounted(() => {
           <Motion class="flex gap-2" :initial="{ opacity: 0 }" :animate="{ opacity: 1 }" :exit="{ opacity: 0.2 }"
             v-if="soundSelected">
             <UButton color="green" variant="soft" icon="i-ph-check" @click="setSound">Cambiar</UButton>
-            <UButton color="red" variant="outline" icon="i-ph-x" @click="soundSelected = ''">Cancelar</UButton>
+            <UButton color="red" variant="ghost" icon="i-ph-x" @click="soundSelected = ''">Cancelar</UButton>
           </Motion>
         </header>
       </template>
