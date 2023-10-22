@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
-import { VNodeRef } from 'vue';
 
 const SECONDS = 1000;
 const MINIMAL_MIN_TIME = 15;
@@ -16,7 +15,6 @@ const selectedTime = ref<Time>();
 const isCustomTime = ref(false);
 const isTransfer = ref(false);
 const currentActive = ref('');
-// const targetActive = ref('');
 
 const timers = ref<Record<any, any>>({});
 
@@ -34,14 +32,6 @@ onClickOutside(target, () => {
   active.value = '';
   consolesStore.selected = null;
 });
-
-// const times: Record<string, number> = {
-//   '20m': 20 * 60,
-//   '30m': 30 * 60,
-//   '1h': 60 * 60,
-//   '2h': 2 * 60 * 60,
-//   '3h': 3 * 60 * 60,
-// }
 
 const times: Record<string, number> = {
   '30s': 30,
@@ -160,13 +150,9 @@ watch(activeConsoles, (consoles) => {
       }
 
       return c;
-    })
-  })
+    });
+  });
 }, { deep: true });
-
-watch(timers, (time) => {
-  console.log(time)
-})
 </script>
 
 <template>
