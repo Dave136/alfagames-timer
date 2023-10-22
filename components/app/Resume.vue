@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 const consoleStore = useConsolesStore();
+
+const finalTime = computed(() => consoleStore.selected?.futureTime ? dayjs(consoleStore.selected?.futureTime).format('hh:mm a') : '');
+const showInfo = computed(() => consoleStore.selected?.countdown || consoleStore.selected?.currentTime);
 </script>
 
 <template>
@@ -15,11 +18,15 @@ const consoleStore = useConsolesStore();
         <p class="text-gray-500 text-center" v-if="!consoleStore.selected?.id">Selecciona una consola</p>
 
         <div v-else>
-          <p class="text-lg mb-2"><span class="text-gray-500 font-bold mr-4">Hora de
-              finalización:</span> {{
-                dayjs(consoleStore.selected?.futureTime).format('hh:mm a') }}</p>
-          <p class="text-lg"><span class="text-gray-500 font-bold mr-4">Tiempo:</span> {{
-            consoleStore.selected?.formatted }}</p>
+          <div v-if="showInfo">
+            <p class="text-lg mb-2"><span class="text-gray-500 font-bold mr-4">Hora de
+                finalización:</span> {{ finalTime }}</p>
+            <p class="text-lg"><span class="text-gray-500 font-bold mr-4">Tiempo:</span> {{
+              consoleStore.selected?.formatted }}</p>
+          </div>
+          <div class="animate-pulse" v-else>
+            <p class="text-center text-gray-600">Establezca el tiempo</p>
+          </div>
         </div>
       </div>
     </div>

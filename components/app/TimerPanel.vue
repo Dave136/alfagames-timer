@@ -76,6 +76,8 @@ function setConsoleTime() {
     return c;
   })
   timeModal.value = false;
+  active.value = '';
+  consolesStore.selected = null;
 }
 
 function activeTransferMode(id: string) {
