@@ -83,6 +83,22 @@ function setConsoleTime() {
   consolesStore.selected = null;
 }
 
+function recalculateFutureTime(id: string) {
+  consolesStore.consoles = consolesStore.consoles.map((c) => {
+    if (c.id === id) {
+      const now = new Date().toString();
+      const time = c.currentTime as number;
+
+      return {
+        ...c,
+        futureTime: dayjs(now).add(time, 's').toString(),
+      }
+    }
+
+    return c;
+  });
+}
+
 function activeTransferMode(id: string) {
   if (!freeConsoles.value.length) {
     useToast().add({
@@ -106,6 +122,7 @@ function transferTime() {
 
 function togglePause(id: string) {
   if (timers.value[id].isPaused) {
+    recalculateFutureTime(id);
     timers.value[id].handleStart();
     return;
   }
