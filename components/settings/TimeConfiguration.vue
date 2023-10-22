@@ -33,9 +33,13 @@ const columns = [
   }
 ];
 
-function getTimeValue() {
+function getTimeValue(): string {
   if (!hh.value && mm.value) {
     return `${mm.value}m`;
+  }
+
+  if (!mm.value && hh.value) {
+    return `${hh.value}h`;
   }
 
   return `${hh.value}h ${mm.value.toString().padStart(2, '0')}m`;
@@ -83,8 +87,12 @@ function saveNewTime() {
   });
 }
 
-function timeStringToNumber(item: string, time: 'h' | 'm'): number {
-  return +item.split(' ').find((val: string) => val.includes(time))!.replace(time, '')
+function timeStringToNumber(item: string, time: 'h' | 'm'): number | undefined {
+  if (item.includes(' ')) {
+    return +item.split(' ').find((val: string) => val.includes(time))!.replace(time, '');
+  }
+
+  return item.includes(time) ? +item.replace(time, '') : undefined;
 }
 
 function editTime(row: Time) {
