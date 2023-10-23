@@ -7,7 +7,7 @@
     "distDir": "../.output/public"
   },
   "package": {
-    "productName": "alfagames",
+    "productName": "Alfagames Timer",
     "version": "0.1.0"
   },
   "tauri": {
@@ -16,8 +16,8 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
-      "copyright": "",
+      "category": "Utility",
+      "copyright": "Copyright © David Arenas",
       "deb": {
         "depends": []
       },
@@ -29,15 +29,8 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": ".alfagames",
+      "identifier": "com.david.alfagames",
       "longDescription": "",
-      "macOS": {
-        "entitlements": null,
-        "exceptionDomain": "",
-        "frameworks": [],
-        "providerShortName": null,
-        "signingIdentity": null
-      },
       "resources": [],
       "shortDescription": "",
       "targets": "all",
@@ -51,12 +44,17 @@
       "csp": null
     },
     "updater": {
-      "active": false
+      "active": true,
+      "dialog": true,
+      "endpoints": [],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEY2Mzk0RjEwRTg0MTQwNzcKUldSM1FFSG9FRTg1OW9NYW1qS1krNzRTWmZST3VLRjdlMS9ZZGVIM2JIVVp0WVNJN0Jna0piSW0K"
     },
     "windows": [
       {
         "fullscreen": false,
         "height": 600,
+        "minHeight": 600,
+        "minWidth": 600,
         "resizable": true,
         "title": "Alfagames App",
         "width": 800
