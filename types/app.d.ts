@@ -2,6 +2,7 @@ interface Sound {
   id: string;
   name: string;
   path: string;
+  url: string;
 }
 
 type Icon = 'i-xbox' | 'i-nintendo' | 'i-playstation';

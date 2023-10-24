@@ -25,6 +25,7 @@ const devState = [
 
 const initialState = import.meta.env.MODE === 'development' ? devState : [];
 
+// TODO: migrate and rename for useTimeStore
 export const useAppStore = defineStore('app-store', {
   state: (): State => ({
     times: initialState,
@@ -33,3 +34,43 @@ export const useAppStore = defineStore('app-store', {
     storage: persistedState.localStorage,
   },
 });
+
+export const useApp2Store = defineStore(
+  'app2-store',
+  () => {
+    const dataDir = ref('');
+    const soundsDir = ref<import('@tauri-apps/api/fs').FileEntry[]>([]);
+
+    async function initialize() {
+      const { createDir, readDir, BaseDirectory } = await import(
+        '@tauri-apps/api/fs'
+      );
+      const { appDataDir } = await import('@tauri-apps/api/path');
+
+      try {
+        dataDir.value = await appDataDir();
+        soundsDir.value = await readDir('sounds', {
+          dir: BaseDirectory.AppData,
+        });
+      } catch (error: any) {
+        if (error.includes('No such file or directory', 'sounds')) {
+          console.log('error reading...');
+          console.log('Creating sounds directory...');
+          await createDir('sounds', { dir: BaseDirectory.AppData });
+          console.log('Calling function again...');
+          initialize();
+          return;
+        }
+      }
+    }
+
+    return {
+      initialize,
+    };
+  },
+  {
+    persist: {
+      storage: persistedState.localStorage,
+    },
+  }
+);

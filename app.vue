@@ -1,3 +1,11 @@
+<script setup lang="ts">
+const app2 = useApp2Store();
+
+onMounted(async () => {
+  await app2.initialize();
+})
+</script>
+
 <template>
   <NuxtLayout>
     <NuxtPage />

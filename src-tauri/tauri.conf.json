@@ -12,7 +12,28 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "all": false,
+      "path": {
+        "all": true
+      },
+      "fs": {
+        "all": false,
+        "copyFile": false,
+        "createDir": true,
+        "exists": false,
+        "readDir": true,
+        "readFile": false,
+        "removeDir": false,
+        "removeFile": false,
+        "renameFile": false,
+        "scope": ["$DATA/**"],
+        "writeFile": false
+      },
+      "http": {
+        "all": false,
+        "request": true,
+        "scope": ["https://btones.b-cdn.net"]
+      }
     },
     "bundle": {
       "active": true,
