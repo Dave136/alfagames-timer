@@ -1,14 +1,32 @@
 <script setup lang="ts">
 import { Motion } from 'motion/vue';
 const soundsStore = useSoundsStore();
+const app2 = useApp2Store();
 
 const { listen } = await import('@tauri-apps/api/event');
+
+interface NSound extends Sound {
+  downloaded: boolean;
+}
 
 const cardRef = ref(null);
 const isPlaying = ref(false);
 const active = ref('');
 const soundSelected = ref('');
-const sounds = computed(() => soundsStore.sounds);
+const sounds = computed<NSound[]>(() => {
+  if (!app2.soundsDir.length) {
+    return soundsStore.sounds.map((sound) => ({
+      ...sound,
+      downloaded: false
+    }));
+  };
+
+  return soundsStore.sounds.map((sound) => ({
+    ...sound,
+    downloaded: Boolean(app2.soundsDir.filter((dir) => dir.name === sound.path).length)
+  }))
+});
+
 const defaultSound = ref('');
 
 onClickOutside(cardRef, (e) => {
@@ -42,6 +60,8 @@ async function playSoundAction(sound: Sound) {
     isPlaying.value = false;
   }
 }
+
+async function downloadSound() { }
 
 onMounted(() => {
   if (soundsStore.selected) {
@@ -92,7 +112,8 @@ onUnmounted(() => {
                 :color="soundSelected === sound.id ? 'green' : defaultSound === sound.id ? 'pink' : active === sound.id && isPlaying ? 'green' : 'gray'"
                 variant="ghost"
                 :icon="active === sound.id && isPlaying ? 'i-ph-stop-circle-duotone' : 'i-ph-play-circle-duotone'"
-                :disabled="isPlaying" @click.prevent="playSoundAction(sound)" />
+                :disabled="isPlaying" @click.prevent="playSoundAction(sound)" v-if="sound.downloaded" />
+              <UButton color="gray" variant="link" icon="i-ph-download-simple-duotone" @click="downloadSound" v-else />
             </div>
           </button>
         </div>

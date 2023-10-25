@@ -10,7 +10,7 @@ export default async function (sound?: string): Promise<boolean> {
 
   try {
     const { invoke } = await import('@tauri-apps/api');
-    return await invoke('play_sound', { path: sound });
+    return await invoke('play_sound', { name: sound });
   } catch (error) {
     console.error(error);
     useToast().add({

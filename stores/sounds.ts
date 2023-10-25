@@ -33,7 +33,7 @@ interface SoundsState {
 export const useSoundsStore = defineStore('sounds-store', {
   state: (): SoundsState => ({
     sounds: soundsList,
-    selected: soundsList[1],
+    selected: null,
   }),
   persist: {
     storage: persistedState.localStorage,

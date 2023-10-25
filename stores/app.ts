@@ -52,6 +52,10 @@ export const useApp2Store = defineStore(
         soundsDir.value = await readDir('sounds', {
           dir: BaseDirectory.AppData,
         });
+
+        console.log({
+          soundsDir: soundsDir.value,
+        });
       } catch (error: any) {
         if (error.includes('No such file or directory', 'sounds')) {
           console.log('error reading...');
@@ -65,6 +69,8 @@ export const useApp2Store = defineStore(
     }
 
     return {
+      dataDir,
+      soundsDir,
       initialize,
     };
   },

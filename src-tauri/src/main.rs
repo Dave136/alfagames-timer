@@ -2,20 +2,14 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use std::{fs::File, io::BufReader};
-
-use rodio::Source;
 use tauri::Window;
 
-const PATH: &'static str = "../public/sounds/";
-
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}!", name)
-}
-
-#[tauri::command]
-fn play_sound(path: &str, window: Window) {
-    let file = File::open(format!("{}{}", PATH, path)).unwrap();
+fn play_sound(name: &str, window: Window, app_handle: tauri::AppHandle) {
+    // let file = File::open(format!("{}{}", PATH, path)).unwrap();
+    let app_data_dir = app_handle.path_resolver().app_data_dir().unwrap();
+    let app_dir = app_data_dir.to_str().unwrap();
+    let file = File::open(format!("{}/sounds/{}", app_dir, name)).unwrap();
 
     std::thread::spawn(move || {
         let src = rodio::Decoder::new(BufReader::new(file)).unwrap();
@@ -31,7 +25,7 @@ fn play_sound(path: &str, window: Window) {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![greet, play_sound])
+        .invoke_handler(tauri::generate_handler![play_sound])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
