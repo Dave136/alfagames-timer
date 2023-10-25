@@ -1,4 +1,4 @@
-const soundsList: Sound[] = [
+const soundsList: Omit<Sound, 'downloaded'>[] = [
   {
     id: '1',
     name: 'Good bad ugly',
@@ -32,9 +32,31 @@ interface SoundsState {
 
 export const useSoundsStore = defineStore('sounds-store', {
   state: (): SoundsState => ({
-    sounds: soundsList,
+    sounds: [],
     selected: null,
   }),
+  actions: {
+    load() {
+      const app = useApp2Store();
+
+      if (!app.soundsDir.length) {
+        this.sounds = soundsList.map((sound) => ({
+          ...sound,
+          downloaded: false,
+        }));
+        return;
+      }
+
+      this.sounds = soundsList.map((sound) => ({
+        ...sound,
+        downloaded: app.soundsDir.some((dir) => dir.name === sound.path),
+      }));
+    },
+    async refresh() {
+      await useApp2Store().initialize();
+      this.load();
+    },
+  },
   persist: {
     storage: persistedState.localStorage,
   },

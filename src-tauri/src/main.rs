@@ -5,6 +5,16 @@ use std::{fs::File, io::BufReader};
 use tauri::Window;
 
 #[tauri::command]
+fn download_sound(url: &str, name: &str, app_handle: tauri::AppHandle) {
+    let app_data_dir = app_handle.path_resolver().app_data_dir().unwrap();
+    let app_dir = app_data_dir.to_str().unwrap();
+    let response = reqwest::blocking::get(url).unwrap();
+    let bytes = response.bytes().unwrap();
+
+    std::fs::write(format!("{}/sounds/{}", app_dir, name), &bytes).unwrap();
+}
+
+#[tauri::command]
 fn play_sound(name: &str, window: Window, app_handle: tauri::AppHandle) {
     // let file = File::open(format!("{}{}", PATH, path)).unwrap();
     let app_data_dir = app_handle.path_resolver().app_data_dir().unwrap();
@@ -25,7 +35,7 @@ fn play_sound(name: &str, window: Window, app_handle: tauri::AppHandle) {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![play_sound])
+        .invoke_handler(tauri::generate_handler![play_sound, download_sound])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

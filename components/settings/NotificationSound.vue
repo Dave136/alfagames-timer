@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Motion } from 'motion/vue';
 const soundsStore = useSoundsStore();
-const app2 = useApp2Store();
 
 const { listen } = await import('@tauri-apps/api/event');
 
@@ -13,19 +12,7 @@ const cardRef = ref(null);
 const isPlaying = ref(false);
 const active = ref('');
 const soundSelected = ref('');
-const sounds = computed<NSound[]>(() => {
-  if (!app2.soundsDir.length) {
-    return soundsStore.sounds.map((sound) => ({
-      ...sound,
-      downloaded: false
-    }));
-  };
-
-  return soundsStore.sounds.map((sound) => ({
-    ...sound,
-    downloaded: Boolean(app2.soundsDir.filter((dir) => dir.name === sound.path).length)
-  }))
-});
+const sounds = computed(() => soundsStore.sounds);
 
 const defaultSound = ref('');
 
@@ -61,9 +48,24 @@ async function playSoundAction(sound: Sound) {
   }
 }
 
-async function downloadSound() { }
+async function downloadNewSound(sound: NSound) {
+  if (sound.downloaded) return;
+
+  try {
+    await downloadSound(sound.url, sound.path);
+    soundsStore.refresh();
+    useToast().add({
+      icon: 'i-ph-check',
+      title: 'Tono descargado',
+      color: 'green'
+    });
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 onMounted(() => {
+  soundsStore.load();
   if (soundsStore.selected) {
     defaultSound.value = soundsStore.selected.id;
   }
@@ -113,7 +115,8 @@ onUnmounted(() => {
                 variant="ghost"
                 :icon="active === sound.id && isPlaying ? 'i-ph-stop-circle-duotone' : 'i-ph-play-circle-duotone'"
                 :disabled="isPlaying" @click.prevent="playSoundAction(sound)" v-if="sound.downloaded" />
-              <UButton color="gray" variant="link" icon="i-ph-download-simple-duotone" @click="downloadSound" v-else />
+              <UButton color="gray" variant="link" icon="i-ph-download-simple-duotone" @click="downloadNewSound(sound)"
+                v-else />
             </div>
           </button>
         </div>
