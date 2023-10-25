@@ -122,25 +122,53 @@ function togglePause(id: string) {
   console.log(timers.value[id])
 }
 
-watch(activeConsoles, (consoles) => {
-  const updated = consoles.map((item) => {
+function finishTime(item: Consoles) {
+  if (item.finished) return;
+
+  isTransfer.value = false;
+
+  const updated = {
+    ...item,
+    currentTime: 0,
+    countdown: 0,
+    finished: true,
+  }
+
+  consolesStore.consoles = consolesStore.consoles.map((c) => {
+    if (c.id === updated.id) {
+      return updated;
+    }
+
+    return c;
+  });
+
+  playSound(soundsStore.selected?.path);
+
+}
+
+onMounted(() => {
+  if (!activeConsoles.value.length) return;
+
+  const updated = activeConsoles.value.map((item) => {
     const now = new Date();
     const futureTime = new Date(item.futureTime as string);
-    // if current time is greater than setted time
     const isGreaterThenFuture = now.getTime() > futureTime.getTime();
     const seconds = Math.floor(
       (futureTime.getTime() - now.getTime()) / SECONDS
     );
 
+    console.log({ isGreaterThenFuture, seconds, now, futureTime });
+
     if (isGreaterThenFuture) {
       item.finished = true;
       isTransfer.value = false;
-      playSound(soundsStore.selected?.path);
     }
+
+    console.log('setting currentTime: ', isGreaterThenFuture ? 0 : seconds);
+    console.log('setting countdown: ', isGreaterThenFuture ? 0 : item.countdown);
 
     item.currentTime = isGreaterThenFuture ? 0 : seconds;
     item.countdown = isGreaterThenFuture ? 0 : item.countdown;
-    // item.countdown = isGreaterThenFuture ? 0 : item.countdown;
   });
 
   updated.forEach((item: any) => {
@@ -155,7 +183,7 @@ watch(activeConsoles, (consoles) => {
       return c;
     });
   });
-}, { deep: true });
+})
 </script>
 
 <template>
@@ -167,7 +195,8 @@ watch(activeConsoles, (consoles) => {
           :ui="{ base: `border relative ${active === item.id ? isTransfer ? 'border-green-400' : 'border-pink-500' : 'border-transparent'}` }">
           <div class="flex flex-col items-center w-[150px] h-[150px]" v-if="item.countdown > 0">
             <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time"
-              @formatted="(time) => item.formatted = time" :ref="(el) => el && (timers[item.id] = el)" />
+              @formatted="(time) => item.formatted = time" :ref="(el) => el && (timers[item.id] = el)"
+              @finished="finishTime(item)" />
           </div>
           <div class="flex flex-col items-center" v-else>
             <component :is="getIcon(item.icon)"

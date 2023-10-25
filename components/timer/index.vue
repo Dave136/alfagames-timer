@@ -9,6 +9,7 @@ interface Emits {
   (e: 'count', time: number): void;
   (e: 'new'): void;
   (e: 'formatted', time: string): void
+  (e: 'finished'): void;
 }
 
 const props = defineProps<Props>();
@@ -54,6 +55,7 @@ const interval = ref(setInterval(updateTimer, 1000));
 watchEffect(() => {
   if (count.value === 0) {
     clearInterval(interval.value);
+    emit('finished');
   }
 })
 

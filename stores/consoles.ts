@@ -1,16 +1,3 @@
-interface Consoles {
-  id: string;
-  order: number;
-  name: string;
-  icon: Icon;
-  time?: number;
-  countdown: number;
-  currentTime?: number;
-  formatted?: string;
-  futureTime?: string;
-  finished?: boolean;
-}
-
 interface ConsolesState {
   consoles: Consoles[];
   selected: Consoles | null;

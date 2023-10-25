@@ -1,3 +1,16 @@
+interface Consoles {
+  id: string;
+  order: number;
+  name: string;
+  icon: Icon;
+  time?: number;
+  countdown: number;
+  currentTime?: number;
+  formatted?: string;
+  futureTime?: string;
+  finished?: boolean;
+}
+
 interface Sound {
   id: string;
   name: string;
