@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 import { Presence, Motion } from 'motion/vue';
+
+dayjs.extend(duration);
 
 const SECONDS = 1000;
 const MINIMAL_MIN_TIME = 15;
@@ -146,43 +149,33 @@ function finishTime(item: Consoles) {
 
 }
 
-onMounted(() => {
+onBeforeMount(() => {
   if (!activeConsoles.value.length) return;
 
-  const updated = activeConsoles.value.map((item) => {
-    const now = new Date();
-    const futureTime = new Date(item.futureTime as string);
-    const isGreaterThenFuture = now.getTime() > futureTime.getTime();
-    const seconds = Math.floor(
-      (futureTime.getTime() - now.getTime()) / SECONDS
-    );
+  consolesStore.consoles = consolesStore.consoles.map((c) => {
+    if (c.countdown && c.currentTime && !c.finished) {
+      const now = dayjs();
+      const future = dayjs(c.futureTime);
+      const isGreaterThenFuture = now.isAfter(future);
+      const diff = future.diff(now);
+      const duration = dayjs.duration(diff);
+      const seconds = Math.floor(duration.asSeconds());
 
-    console.log({ isGreaterThenFuture, seconds, now, futureTime });
-
-    if (isGreaterThenFuture) {
-      item.finished = true;
-      isTransfer.value = false;
-    }
-
-    console.log('setting currentTime: ', isGreaterThenFuture ? 0 : seconds);
-    console.log('setting countdown: ', isGreaterThenFuture ? 0 : item.countdown);
-
-    item.currentTime = isGreaterThenFuture ? 0 : seconds;
-    item.countdown = isGreaterThenFuture ? 0 : item.countdown;
-  });
-
-  updated.forEach((item: any) => {
-    consolesStore.consoles = consolesStore.consoles.map((c) => {
-      if (c.id === item?.id) {
-        return {
-          ...c,
-          ...item,
-        };
+      if (isGreaterThenFuture) {
+        c.finished = true;
+        isTransfer.value = false;
       }
 
-      return c;
-    });
-  });
+      c.currentTime = isGreaterThenFuture ? 0 : seconds;
+      c.countdown = isGreaterThenFuture ? 0 : seconds;
+
+      return {
+        ...c,
+      }
+    }
+
+    return c;
+  })
 })
 </script>
 
