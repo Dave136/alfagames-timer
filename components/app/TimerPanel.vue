@@ -66,6 +66,7 @@ function setConsoleTime() {
 
       return {
         ...c,
+        finished: false,
         countdown: time,
         futureTime: dayjs(now).add(time, 's').toString(),
       }
@@ -76,6 +77,11 @@ function setConsoleTime() {
   timeModal.value = false;
   active.value = '';
   consolesStore.selected = null;
+}
+
+function extendTime(id: string) {
+  active.value = id;
+  openTimeModal();
 }
 
 function recalculateFutureTime(id: string) {
@@ -225,7 +231,8 @@ onBeforeMount(() => {
           v-if="!isTransfer && !item.finished && item.currentTime && item.currentTime > 0" title="Transferir" />
         <UButton icon="i-ph-check-circle" class="animate-pulse" size="xl" color="green" variant="ghost"
           @click="consolesStore.resetData(item.id)" title="Finalizar" v-if="item.finished" />
-        <UButton icon="i-ph-plus-circle-duotone" size="xl" variant="ghost" @click="openTimeModal" v-if="item.finished" />
+        <UButton icon="i-ph-plus-circle-duotone" size="xl" variant="ghost" @click="extendTime(item.id)"
+          v-if="item.finished" />
       </div>
     </div>
     <UModal v-model="timeModal">
