@@ -56,8 +56,9 @@ async function downloadNewSound(sound: NSound) {
     soundsStore.refresh();
     useToast().add({
       icon: 'i-ph-check',
-      title: 'Tono descargado',
-      color: 'green'
+      color: 'green',
+      title: 'Nuevo tono',
+      description: `"${sound.name}" ha sido descargado`,
     });
   } catch (error) {
     console.log(error);

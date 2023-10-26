@@ -58,14 +58,15 @@ export const useConsolesStore = defineStore('consoles-store', {
   actions: {
     transferTime(current: string, target: string) {
       const toast = useToast();
-
       const currentConsole = this.consoles.find((c) => c.id === current);
+      const targetConsole = this.consoles.find((c) => c.id === target);
 
       if (!currentConsole) {
         toast.add({
           color: 'red',
           icon: 'i-ph-x-circle-duotone',
-          title: 'Consola no encontrada o no disponible',
+          title: 'Error',
+          description: `Consola no encontrada o no disponible`,
         });
         return;
       }
@@ -95,13 +96,15 @@ export const useConsolesStore = defineStore('consoles-store', {
       });
 
       toast.add({
-        title: 'Tiempo transferido',
         icon: 'i-ph-check',
         color: 'green',
+        title: currentConsole?.name,
+        description: `Tiempo transferido a ${targetConsole?.name}`,
       });
     },
     resetData(id: string) {
       const toast = useToast();
+      const console = this.consoles.find((c) => c.id === id);
 
       this.consoles = this.consoles.map((c) => {
         if (c.id === id) {
@@ -117,7 +120,8 @@ export const useConsolesStore = defineStore('consoles-store', {
       toast.add({
         icon: 'i-ph-check',
         color: 'green',
-        title: 'Tiempo finalizado',
+        title: console?.name,
+        description: 'Tiempo finalizado',
       });
     },
   },
