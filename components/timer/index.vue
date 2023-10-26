@@ -31,6 +31,10 @@ const s = computed(() => count.value - h.value * 3600 - m.value * 60);
 watchEffect(() => {
   if (typeof count.value === 'number') {
     emit('count', count.value);
+
+    if (count.value === 0) {
+      emit('finished');
+    }
   }
 })
 
@@ -55,7 +59,6 @@ const interval = ref(setInterval(updateTimer, 1000));
 watchEffect(() => {
   if (count.value === 0) {
     clearInterval(interval.value);
-    emit('finished');
   }
 })
 

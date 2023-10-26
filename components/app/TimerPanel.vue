@@ -19,6 +19,7 @@ const selectedTime = ref<Time>();
 const isCustomTime = ref(false);
 const isTransfer = ref(false);
 const currentActive = ref('');
+const playing = ref(false);
 
 const timers = ref<Record<any, any>>({});
 
@@ -122,11 +123,10 @@ function togglePause(id: string) {
   }
 
   timers.value[id].handlePause()
-  console.log(timers.value[id])
 }
 
 function finishTime(item: Consoles) {
-  if (item.finished) return;
+  if (item.finished || playing.value) return;
 
   isTransfer.value = false;
 
@@ -145,7 +145,7 @@ function finishTime(item: Consoles) {
     return c;
   });
 
-  playSound(soundsStore.selected?.path);
+  playSound(soundsStore.selected?.path)
 
 }
 
