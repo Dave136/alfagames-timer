@@ -6,7 +6,7 @@ use tauri::Window;
 
 #[tauri::command]
 fn download_sound(url: &str, name: &str, app_handle: tauri::AppHandle) {
-    let app_data_dir = app_handle.path_resolver().app_data_dir().unwrap();
+    let app_data_dir = app_handle.path_resolver().app_local_data_dir().unwrap();
     let app_dir = app_data_dir.to_str().unwrap();
     let response = reqwest::blocking::get(url).unwrap();
     let bytes = response.bytes().unwrap();
@@ -17,7 +17,7 @@ fn download_sound(url: &str, name: &str, app_handle: tauri::AppHandle) {
 #[tauri::command]
 fn play_sound(name: &str, window: Window, app_handle: tauri::AppHandle) {
     // let file = File::open(format!("{}{}", PATH, path)).unwrap();
-    let app_data_dir = app_handle.path_resolver().app_data_dir().unwrap();
+    let app_data_dir = app_handle.path_resolver().app_local_data_dir().unwrap();
     let app_dir = app_data_dir.to_str().unwrap();
     let file = File::open(format!("{}/sounds/{}", app_dir, name)).unwrap();
 
