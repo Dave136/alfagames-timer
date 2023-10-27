@@ -67,7 +67,9 @@
     "updater": {
       "active": true,
       "dialog": true,
-      "endpoints": [],
+      "endpoints": [
+        "https://gist.githubusercontent.com/Dave136/854901fe48bfb49af64029545a8ec76d/raw"
+      ],
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEY2Mzk0RjEwRTg0MTQwNzcKUldSM1FFSG9FRTg1OW9NYW1qS1krNzRTWmZST3VLRjdlMS9ZZGVIM2JIVVp0WVNJN0Jna0piSW0K"
     },
     "windows": [
