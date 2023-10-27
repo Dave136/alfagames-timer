@@ -53,7 +53,7 @@ export const useApp2Store = defineStore(
           dir: BaseDirectory.AppData,
         });
       } catch (error: any) {
-        if (error.includes('No such file or directory', 'sounds')) {
+        if (error.includes('sounds')) {
           console.log('error reading...');
           console.log('Creating sounds directory...');
           await createDir('sounds', { dir: BaseDirectory.AppData });
