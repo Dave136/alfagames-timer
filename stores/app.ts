@@ -45,18 +45,18 @@ export const useApp2Store = defineStore(
       const { createDir, readDir, BaseDirectory } = await import(
         '@tauri-apps/api/fs'
       );
-      const { appDataDir } = await import('@tauri-apps/api/path');
+      const { appLocalDataDir } = await import('@tauri-apps/api/path');
 
       try {
-        dataDir.value = await appDataDir();
+        dataDir.value = await appLocalDataDir();
         soundsDir.value = await readDir('sounds', {
-          dir: BaseDirectory.AppData,
+          dir: BaseDirectory.AppLocalData,
         });
       } catch (error: any) {
         if (error.includes('sounds')) {
           console.log('error reading...');
           console.log('Creating sounds directory...');
-          await createDir('sounds', { dir: BaseDirectory.AppData });
+          await createDir('sounds', { dir: BaseDirectory.AppLocalData });
           console.log('Calling function again...');
           initialize();
           return;
