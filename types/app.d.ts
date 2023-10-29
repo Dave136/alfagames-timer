@@ -1,3 +1,8 @@
+interface CustomTimeData {
+  h: number;
+  m: number;
+}
+
 interface Consoles {
   id: string;
   order: number;
