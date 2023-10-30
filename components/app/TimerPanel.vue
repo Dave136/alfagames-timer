@@ -118,6 +118,7 @@ function stop() {
   consolesStore.stop(stopId.value)
   timers.value[stopId.value].handleNew();
   stopModal.value = false;
+  stopId.value = '';
 }
 
 
