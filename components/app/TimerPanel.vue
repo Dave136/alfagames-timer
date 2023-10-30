@@ -6,12 +6,15 @@ import { Presence, Motion } from 'motion/vue';
 dayjs.extend(duration);
 
 const active = ref('');
+const stopId = ref('');
 const target = ref(null);
 const consolesStore = useConsolesStore();
 const appStore = useAppStore();
 const soundsStore = useSoundsStore();
 
 const timeModal = ref(false);
+const stopModal = ref(false);
+
 const selectedTime = ref<Time>();
 const isCustomTime = ref(false);
 const isTransfer = ref(false);
@@ -109,6 +112,14 @@ function transferTime() {
   isTransfer.value = false;
   currentActive.value = '';
 }
+
+
+function stop() {
+  consolesStore.stop(stopId.value)
+  timers.value[stopId.value].handleNew();
+  stopModal.value = false;
+}
+
 
 function togglePause(id: string) {
   if (timers.value[id].isPaused) {
@@ -208,6 +219,11 @@ onBeforeMount(() => {
           title="Seleccionar" v-if="isTransfer && active === item.id" />
 
         <!-- Normal -->
+        <UButton icon="i-ph-stop-circle-duotone" size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost"
+          @click="() => {
+            stopModal = true
+            stopId = item.id
+          }" v-if="!isTransfer && !item.finished && item.currentTime && item.countdown" />
         <UButton
           :icon="timers[item.id] && timers[item.id].isPaused ? 'i-ph-play-circle-duotone' : 'i-ph-pause-circle-duotone'"
           size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost" @click="togglePause(item.id)"
@@ -233,6 +249,19 @@ onBeforeMount(() => {
         <UButton @click="setConsoleTime" class="mt-6" v-if="!isCustomTime">
           Iniciar
         </UButton>
+      </section>
+    </UModal>
+
+    <UModal v-model="stopModal" prevent-close>
+      <section class="p-8">
+        <h3 class="text-2xl mb-6">¿Estás seguro de finalizar el tiempo?</h3>
+        <div class="flex gap-2">
+          <UButton variant="ghost" label="Cancelar" @click="() => {
+            stopModal = false
+            stopId = ''
+          }" />
+          <UButton label="Finalizar" @click="stop" />
+        </div>
       </section>
     </UModal>
 

@@ -141,6 +141,7 @@ onUnmounted(() => {
 })
 
 defineExpose({
+  handleNew,
   handleStart,
   handlePause,
   isPaused,

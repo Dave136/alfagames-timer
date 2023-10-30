@@ -124,6 +124,28 @@ export const useConsolesStore = defineStore('consoles-store', {
         description: 'Tiempo finalizado',
       });
     },
+    stop(id: string) {
+      const toast = useToast();
+      const console = this.consoles.find((c) => c.id === id);
+
+      this.consoles = this.consoles.map((c) => {
+        if (c.id === id) {
+          return {
+            ...c,
+            ...DEFAULT_VALUES,
+          };
+        }
+
+        return c;
+      });
+
+      toast.add({
+        icon: 'i-ph-check',
+        color: 'green',
+        title: console?.name,
+        description: 'Tiempo reseteado',
+      });
+    },
   },
   persist: {
     storage: persistedState.localStorage,
