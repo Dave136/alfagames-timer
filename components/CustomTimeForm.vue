@@ -2,12 +2,16 @@
 import { object, number, maxValue, minValue, type Input } from 'valibot';
 import type { FormSubmitEvent } from '@nuxt/ui/dist/runtime/types';
 
-const schema = object({
-  h: number([maxValue(6, 'El tiempo máximo es de 6 horas'), minValue(0)]),
-  m: number([maxValue(59, 'El tiempo mínimo es de 59 minutos'), minValue(20, 'El tiempo mínimo es de 20 minutos')]),
-});
+const showGeneralAlert = ref(true);
 
-type Schema = Input<typeof schema>;
+const schema = computed(() => {
+  return object({
+    h: number([maxValue(6, 'El tiempo máximo es de 6 horas'), minValue(0)]),
+    m: number([maxValue(59, 'El tiempo mínimo es de 59 minutos'), minValue(state.value.h ? 0 : 20, state.value.h ? '' : 'El tiempo mínimo es de 20 minutos')]),
+  })
+})
+
+type Schema = Input<typeof schema.value>;
 
 const state = ref({
   h: 0,
@@ -21,12 +25,21 @@ const emit = defineEmits<{
 async function submit(event: FormSubmitEvent<Schema>) {
   emit('submit', event.data);
 }
+
+onMounted(() => {
+  setTimeout(() => {
+    showGeneralAlert.value = false
+  }, 5000);
+})
 </script>
 
 <template>
   <div class="flex flex-col gap-2">
     <UAlert title="Atención" color="orange" description="El tiempo mínimo son 20min" variant="soft"
-      icon="i-ph-warning-duotone" />
+      icon="i-ph-warning-duotone" v-if="showGeneralAlert" />
+
+    <UAlert title="Atención" color="orange" description="Si no tiene establecida una hora, debe ingresar los minutos"
+      variant="soft" icon="i-ph-warning-duotone" v-if="!state.h" />
 
     <UForm :schema="schema" :state="state" class="mt-4" @submit="submit">
       <div class="flex gap-2">
