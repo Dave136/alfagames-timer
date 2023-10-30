@@ -1,20 +1,11 @@
 <script setup lang="ts">
 const appStore = useAppStore();
 
-const label = ref('');
 const mode = ref<'creation' | 'editing' | 'normal'>('normal');
-const time = reactive<Record<string, number | undefined>>({
-  h: undefined,
-  m: undefined,
-  // s: undefined,
-});
-
 const itemId = ref('');
 const isDelete = ref(false);
 
-const hh = computed<number>(() => time?.h || 0);
-const mm = computed<number>(() => time?.m || 0);
-
+const form = ref<Record<any, any> | null>(null);
 const columns = [
   {
     key: 'id',
@@ -33,58 +24,52 @@ const columns = [
   }
 ];
 
-function getTimeValue(): string {
-  if (!hh.value && mm.value) {
-    return `${mm.value}m`;
+function getTimeValue({ hh = 0, mm = 0 }: { hh?: number, mm?: number }): string {
+  if (!hh && mm) {
+    return `${mm}m`;
   }
 
-  if (!mm.value && hh.value) {
-    return `${hh.value}h`;
+  if (!mm && hh) {
+    return `${hh}h`;
   }
 
-  return `${hh.value}h ${mm.value.toString().padStart(2, '0')}m`;
+  return `${hh}h ${mm.toString().padStart(2, '0')}m`;
 }
 
-function validate(): boolean {
-  if (!label.value) {
+async function saveNewTime() {
+  try {
+    const hh = form.value!.state.h;
+    const mm = form.value!.state.m;
+
+    await form.value?.form!.validate();
+
+    const newTime = {
+      id: String(appStore.times.length + 1),
+      label: form.value!.state.label,
+      value: getTimeValue({
+        hh: form.value!.state.h,
+        mm: form.value!.state.m
+      }),
+      raw: hh * 60 * 60 + mm * 60
+    };
+
+    appStore.times.push(newTime);
+    mode.value = 'normal';
+
     useToast().add({
-      icon: 'i-ph-warning-duotone',
-      title: 'Debe ingresar una etiqueta',
-      color: 'orange'
+      icon: 'i-ph-check',
+      title: 'Tiempo agregado',
+      color: 'green'
     });
-    return false;
-  }
-
-  if (!hh.value && !mm.value) {
+  } catch (error) {
+    console.log(error);
     useToast().add({
-      icon: 'i-ph-warning-duotone',
-      title: 'Debe ingresar el tiempo',
-      color: 'orange'
+      icon: 'i-ph-warning',
+      title: 'Advertencia',
+      description: 'Debe completar los campos requeridos',
+      color: 'red'
     });
-    return false;
   }
-
-  return true;
-}
-
-function saveNewTime() {
-  if (!validate()) return;
-
-  const newTime = {
-    id: String(appStore.times.length + 1),
-    label: label.value,
-    value: getTimeValue(),
-    raw: hh.value * 60 * 60 + mm.value * 60,
-  };
-
-  appStore.times.push(newTime);
-  mode.value = 'normal';
-
-  useToast().add({
-    icon: 'i-ph-check',
-    title: 'Tiempo agregado',
-    color: 'green'
-  });
 }
 
 function timeStringToNumber(item: string, time: 'h' | 'm'): number | undefined {
@@ -98,33 +83,52 @@ function timeStringToNumber(item: string, time: 'h' | 'm'): number | undefined {
 function editTime(row: Time) {
   mode.value = 'editing';
   itemId.value = row.id;
-  label.value = row.label;
-  time.h = timeStringToNumber(row.value, 'h')
-  time.m = timeStringToNumber(row.value, 'm')
+
+  setTimeout(() => {
+    form.value!.state.label = row.label;
+    form.value!.state.h = timeStringToNumber(row.value, 'h');
+    form.value!.state.m = timeStringToNumber(row.value, 'm');
+  }, 200);
 }
 
 function saveEditedTime() {
-  if (!validate()) return;
+  try {
+    form.value?.form!.validate();
 
-  appStore.times = appStore.times.map((t) => {
-    if (t.id === itemId.value) {
-      return {
-        ...t,
-        label: label.value,
-        value: getTimeValue(),
-        raw: hh.value * 60 * 60 + mm.value * 60,
+    appStore.times = appStore.times.map((t) => {
+      if (t.id === itemId.value) {
+        const hh = form.value!.state.h;
+        const mm = form.value!.state.m;
+
+        return {
+          ...t,
+          label: form.value!.state.label,
+          value: getTimeValue({
+            hh: form.value!.state.h,
+            mm: form.value!.state.m
+          }),
+          raw: hh * 60 * 60 + mm * 60,
+        }
       }
-    }
 
-    return t;
-  });
+      return t;
+    });
 
-  mode.value = 'normal';
-  useToast().add({
-    icon: 'i-ph-check',
-    title: 'Tiempo editado',
-    color: 'green'
-  });
+    mode.value = 'normal';
+    useToast().add({
+      icon: 'i-ph-check',
+      title: 'Tiempo editado',
+      color: 'green'
+    });
+  } catch (error) {
+    console.log(error);
+    useToast().add({
+      icon: 'i-ph-warning',
+      title: 'Advertencia',
+      description: 'Revise los errores',
+      color: 'red'
+    });
+  }
 }
 
 function deleteTime(row: Time) {
@@ -171,26 +175,7 @@ watch(isDelete, () => {
         </UTable>
       </section>
 
-      <section class="mt-8" v-if="['creation', 'editing'].includes(mode)">
-        <div class="flex flex-col gap-2">
-          <UAlert title="Atención" color="orange" description="El tiempo mínimo son 15min" variant="soft"
-            icon="i-ph-warning-duotone" />
-
-          <div class="flex gap-2 mt-4">
-            <UFormGroup>
-              <UInput v-model="label" placeholder="Etiqueta" :iu="{ base: 'w-10' }" />
-            </UFormGroup>
-            <div>-</div>
-            <UFormGroup>
-              <UInput v-model.number="time.h" placeholder="hh" :iu="{ base: 'w-10' }" />
-            </UFormGroup>
-            <div>:</div>
-            <UFormGroup required>
-              <UInput v-model.number="time.m" placeholder="mm" :iu="{ base: 'w-10' }" />
-            </UFormGroup>
-          </div>
-        </div>
-      </section>
+      <ConfigurationTimeForm ref="form" v-if="['creation', 'editing'].includes(mode)" />
 
       <section class="mt-6 flex gap-2 justify-end" v-if="['creation', 'editing'].includes(mode)">
         <UButton color="cyan" variant="soft" icon="i-ph-floppy-disk" @click="saveNewTime" v-if="mode === 'creation'">
