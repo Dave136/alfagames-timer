@@ -3,7 +3,7 @@ interface ConsolesState {
   selected: Consoles | null;
 }
 
-const DEFAULT_VALUES = {
+export const DEFAULT_VALUES = {
   time: 0,
   countdown: 0,
   currentTime: 0,

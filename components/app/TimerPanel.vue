@@ -2,6 +2,7 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { Presence, Motion } from 'motion/vue';
+import { DEFAULT_VALUES } from '~/stores/consoles';
 
 dayjs.extend(duration);
 
@@ -160,6 +161,13 @@ onBeforeMount(() => {
   if (!activeConsoles.value.length) return;
 
   consolesStore.consoles = consolesStore.consoles.map((c) => {
+    if (c.countdown && c.countdown < 0) {
+      return {
+        ...c,
+        ...DEFAULT_VALUES,
+      }
+    }
+
     if (c.countdown && c.currentTime && !c.finished) {
       const now = dayjs();
       const future = dayjs(c.futureTime);
