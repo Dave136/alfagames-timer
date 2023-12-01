@@ -161,7 +161,7 @@ onBeforeMount(() => {
   if (!activeConsoles.value.length) return;
 
   consolesStore.consoles = consolesStore.consoles.map((c) => {
-    if (c.countdown && c.countdown < 0) {
+    if ((c.countdown && c.countdown < 0) || (c.currentTime && c.currentTime < 0)) {
       return {
         ...c,
         ...DEFAULT_VALUES,
