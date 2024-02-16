@@ -202,8 +202,11 @@ onBeforeMount(() => {
         <UCard
           :ui="{ base: `border relative ${active === item.id ? isTransfer ? 'border-green-400' : 'border-pink-500' : 'border-transparent'}` }">
           <div class="flex flex-col items-center w-[7.5rem] h-[7.5rem]" v-if="item.countdown > 0">
-            <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time"
+            <!-- <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time"
               @formatted="(time) => item.formatted = time" :ref="(el) => el && (timers[item.id] = el)"
+              @finished="finishTime(item)" /> -->
+            <TimerNew :countdown="item.countdown" :ref="(el) => el && (timers[item.id] = el)"
+              @count="(time) => item.currentTime = time" @formatted="(time) => item.formatted = time"
               @finished="finishTime(item)" />
           </div>
           <div class="flex flex-col items-center" v-else>
