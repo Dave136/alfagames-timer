@@ -201,14 +201,14 @@ onBeforeMount(() => {
         :disabled="isTransfer && item.countdown > 0 || item.finished">
         <UCard
           :ui="{ base: `border relative ${active === item.id ? isTransfer ? 'border-green-400' : 'border-pink-500' : 'border-transparent'}` }">
-          <div class="flex flex-col items-center w-[150px] h-[150px]" v-if="item.countdown > 0">
+          <div class="flex flex-col items-center w-[7.5rem] h-[7.5rem]" v-if="item.countdown > 0">
             <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time"
               @formatted="(time) => item.formatted = time" :ref="(el) => el && (timers[item.id] = el)"
               @finished="finishTime(item)" />
           </div>
           <div class="flex flex-col items-center" v-else>
             <component :is="getIcon(item.icon)"
-              v-bind="{ class: `${isTransfer && active === item.id ? 'fill-green-400' : !isTransfer && active === item.id ? 'fill-pink-500' : 'fill-gray-500'} w-[150px]` }" />
+              v-bind="{ class: `${isTransfer && active === item.id ? 'fill-green-400' : !isTransfer && active === item.id ? 'fill-pink-500' : 'fill-gray-500'} w-[7.5rem]` }" />
           </div>
           <div
             class="absolute w-full h-full left-0 top-0 flex justify-center items-center bg-black/20 rounded-md backdrop-blur-sm"
@@ -251,7 +251,7 @@ onBeforeMount(() => {
     </div>
     <UModal v-model="timeModal">
       <section class="p-8">
-        <h1 class="text-2xl mb-8">Selecciona el tiempo</h1>
+        <h1 class="text-lg mb-8">Selecciona el tiempo</h1>
         <USelectMenu v-model="selectedTime" :options="appStore.times" :disabled="isCustomTime" />
         <UCheckbox v-model="isCustomTime" class="my-8" name="Personalizar" label="Personalizar" />
         <CustomTimeForm v-if="isCustomTime" @submit="(data) => setConsoleTime(data)" />
@@ -263,7 +263,7 @@ onBeforeMount(() => {
 
     <UModal v-model="stopModal" prevent-close>
       <section class="p-8">
-        <h3 class="text-2xl mb-6">¿Estás seguro de finalizar el tiempo?</h3>
+        <h3 class="text-lg mb-6">¿Estás seguro de finalizar el tiempo?</h3>
         <div class="flex gap-2">
           <UButton variant="ghost" label="Cancelar" @click="() => {
             stopModal = false

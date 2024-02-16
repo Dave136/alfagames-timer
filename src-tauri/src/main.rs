@@ -118,8 +118,8 @@ fn handle_menu_event(event: WindowMenuEvent<Wry>) {
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![play_sound, download_sound])
-        .on_menu_event(handle_menu_event)
-        .menu(custom_menu())
+        // .on_menu_event(handle_menu_event)
+        // .menu(custom_menu())
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -7,15 +7,21 @@ onMounted(async () => {
 </script>
 
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
-  <UNotifications />
+  <div class="w-full min-h-full overflow-hidden">
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+    <UNotifications />
+  </div>
 </template>
 
 <style>
 html {
   background-color: #0f172a;
-  /* background-color: #0d0f14; */
+}
+
+body {
+  height: 100%;
+  width: 100%;
 }
 </style>

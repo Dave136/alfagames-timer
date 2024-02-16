@@ -7,7 +7,7 @@ const showInfo = computed(() => consoleStore.selected?.countdown || consoleStore
 </script>
 
 <template>
-  <div class="bg-gray-900 p-6 min-h-screen">
+  <div class="bg-gray-850 p-6 h-full border-l border-l-gray-700">
     <div class="flex flex-col items-start h-full" :class="!consoleStore.selected?.id && 'justify-center'">
       <header class="flex items-center flex-row-reverse gap-3">
         <h3 class="text-xl font-bold">{{ consoleStore.selected?.name }}</h3>

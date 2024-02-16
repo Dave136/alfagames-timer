@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="mt-24">
     <MainPanel />
   </section>
 </template>
