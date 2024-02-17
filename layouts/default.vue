@@ -20,7 +20,8 @@ function close() {
 <template>
   <div
     class="grid w-full min-h-screen transition-all overflow-hidden [grid-template:'head_head'_'body_body'_minmax(0,1fr)_/_1fr_20rem] xl:[grid-template:'head_head'_'body_info'_minmax(0,1fr)_/_1fr_20rem]">
-    <header class="header w-full bg-gray-800 border-b-gray-700 text-gray-900 h-10 pt-[1px] flex items-center pl-1"
+    <header
+      class="header w-full bg-[#1a1928] border-b border-b-[#232235] text-gray-900 h-10 pt-[1px] flex items-center pl-1"
       data-tauri-drag-region>
       <div class="pointer-events-none w-full h-full flex-row gap-2 flex items-center justify-center">
         <div class="flex-1 pointer-events-none flex-row gap-0.5 flex items-center">

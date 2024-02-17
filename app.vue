@@ -17,7 +17,7 @@ onMounted(async () => {
 
 <style>
 html {
-  background-color: #0f172a;
+  background-color: #1a1928;
 }
 
 body {
