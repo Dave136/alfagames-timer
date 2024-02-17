@@ -18,7 +18,8 @@ function close() {
 </script>
 
 <template>
-  <div class="grid w-full min-h-screen transition-all main overflow-hidden">
+  <div
+    class="grid w-full min-h-screen transition-all overflow-hidden [grid-template:'head_head'_'body_body'_minmax(0,1fr)_/_1fr_20rem] xl:[grid-template:'head_head'_'body_info'_minmax(0,1fr)_/_1fr_20rem]">
     <header class="header w-full bg-gray-800 border-b-gray-700 text-gray-900 h-10 pt-[1px] flex items-center pl-1"
       data-tauri-drag-region>
       <div class="pointer-events-none w-full h-full flex-row gap-2 flex items-center justify-center">
@@ -82,16 +83,20 @@ function close() {
     <main class="body">
       <slot />
     </main>
-    <aside class="info">
+    <aside class="info hidden xl:block">
       <AppResume />
     </aside>
   </div>
 </template>
 
 <style scoped>
-.main {
+/* .main {
   grid-template: "head head" "body info" minmax(0, 1fr) / 1fr 20rem;
 }
+
+.main-simple {
+  grid-template: "head head" "body body" minmax(0, 1fr) / 1fr 20rem;
+} */
 
 .header {
   grid-row-start: head;
