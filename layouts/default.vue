@@ -23,13 +23,7 @@ function close() {
       <div class="pointer-events-none w-full h-full flex-row gap-2 flex items-center justify-center">
         <div class="flex-1 pointer-events-none flex-row gap-0.5 flex items-center">
           <div class="flex flex-row items-center">
-            <button type="button"
-              class="text-gray-300 !px-2 truncate max-w-full min-w-0 whitespace-nowrap outline-none flex-shrink-0 flex items-center focus-visible:ring rounded-md pointer-events-auto justify-center h-6 text-sm">
-              <div class="truncate max-w-[15em] w-full text-center">
-                <!-- <UIcon name="i-ph-arrows-left-right" /> -->
-                <img class="w-4" src="~/assets/img/logo.svg" alt="Alfagames Logo" />
-              </div>
-            </button>
+            <TopbarAppIndicator />
           </div>
         </div>
         <div class="pointer-events-none">
