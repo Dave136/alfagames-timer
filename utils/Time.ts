@@ -1,4 +1,4 @@
-import { computed, type Ref } from 'vue';
+import { computed, type Ref } from "vue";
 
 interface TimeAmpm {
   seconds: Ref<number>;
@@ -68,7 +68,7 @@ export default class Time {
 
   static getFormattedTimeFromSeconds(
     totalSeconds: Ref<number>,
-    format: '12-hour' | '24-hour'
+    format: "12-hour" | "24-hour"
   ): TimeAmpm {
     const {
       seconds: secondsValue,
@@ -76,10 +76,10 @@ export default class Time {
       hours,
     } = Time.getTimeFromSeconds(totalSeconds);
     const ampm = computed(() =>
-      format === '12-hour' ? (hours.value >= 12 ? 'pm' : 'am') : ''
+      format === "12-hour" ? (hours.value >= 12 ? "pm" : "am") : ""
     );
     const hoursValue = computed(() =>
-      format === '12-hour' ? hours.value % 12 : hours.value
+      format === "12-hour" ? hours.value % 12 : hours.value
     );
 
     return {

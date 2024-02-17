@@ -117,20 +117,20 @@ function transferTime() {
 
 function stop() {
   consolesStore.stop(stopId.value)
-  timers.value[stopId.value].handleNew();
+  timers.value[stopId.value].new();
   stopModal.value = false;
   stopId.value = '';
 }
 
 
 function togglePause(id: string) {
-  if (timers.value[id].isPaused) {
-    recalculateFutureTime(id);
-    timers.value[id].handleStart();
+  if (timers.value[id].paused) {
+    // recalculateFutureTime(id);
+    timers.value[id].resume();
     return;
   }
 
-  timers.value[id].handlePause()
+  timers.value[id].pause()
 }
 
 function finishTime(item: Consoles) {
@@ -205,8 +205,12 @@ onBeforeMount(() => {
             <!-- <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time"
               @formatted="(time) => item.formatted = time" :ref="(el) => el && (timers[item.id] = el)"
               @finished="finishTime(item)" /> -->
-            <TimerNew :countdown="item.countdown" :ref="(el) => el && (timers[item.id] = el)"
+            <!-- <TimerNew :countdown="item.countdown" :ref="(el) => el && (timers[item.id] = el)"
               @count="(time) => item.currentTime = time" @formatted="(time) => item.formatted = time"
+              @finished="finishTime(item)" /> -->
+
+            <TimerNew :countdown="item.countdown" @raw="(time) => item.currentTime = time"
+              :ref="(el) => el && (timers[item.id] = el)" @formatted="(time) => item.formatted = time"
               @finished="finishTime(item)" />
           </div>
           <div class="flex flex-col items-center" v-else>
