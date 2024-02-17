@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { UButton } from '#ui-colors/components';
 import { appWindow } from '@tauri-apps/api/window';
 
 function minimize() {
@@ -27,20 +28,14 @@ function close() {
           </div>
         </div>
         <div class="pointer-events-none">
-          <button type="button"
-            class="text-gray-300 !px-2 truncate max-w-full min-w-0 whitespace-nowrap outline-none flex-shrink-0 flex items-center focus-visible:ring rounded-md pointer-events-auto justify-center h-6 text-sm">
+          <UButton class="pointer-events-auto" color="gray" variant="ghost">
             <div class="truncate max-w-[15em] w-full text-center">
               Alfagames
             </div>
-          </button>
+          </UButton>
         </div>
         <div class="flex-1 flex items-center h-full justify-end pointer-events-none">
-          <button type="button"
-            class="text-gray-300 !px-2 truncate max-w-full min-w-0 whitespace-nowrap outline-none flex-shrink-0 flex items-center focus-visible:ring rounded-md pointer-events-auto justify-center h-6 text-sm">
-            <div class="truncate max-w-[15em] w-full text-center">
-              <UIcon name="i-ph-gear text-lg" />
-            </div>
-          </button>
+          <TopbarSettings />
           <div class="ml-4 flex flex-row items-center">
             <button type="button"
               class="text-gray-300 px-2 truncate max-w-full min-w-0 whitespace-nowrap outline-none flex-shrink-0 flex items-center focus-visible:ring rounded-none pointer-events-auto justify-center h-6 text-sm"
