@@ -241,7 +241,7 @@ onBeforeMount(() => {
             stopId = item.id
           }" v-if="!isTransfer && !item.finished && item.currentTime && item.countdown" />
         <UButton
-          :icon="timers[item.id] && timers[item.id].isPaused ? 'i-ph-play-circle-duotone' : 'i-ph-pause-circle-duotone'"
+          :icon="timers[item.id] && timers[item.id].paused ? 'i-ph-play-circle-duotone' : 'i-ph-pause-circle-duotone'"
           size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost" @click="togglePause(item.id)"
           v-if="!isTransfer && !item.finished && item.currentTime && item.countdown" />
         <UButton icon="i-ph-clock-countdown" size="xl" :color="active === item.id ? 'pink' : 'gray'" variant="ghost"
