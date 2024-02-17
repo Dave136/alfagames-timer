@@ -195,7 +195,9 @@ onBeforeMount(() => {
 </script>
 
 <template>
-  <section class="flex items-center gap-4 justify-center overflow-hidden lg:gap-8" ref="target">
+  <section
+    class="grid grid-cols-3 items-center gap-4 justify-center overflow-hidden lg:gap-8 lg:grid-cols-4 xl:grid-cols-5"
+    ref="target">
     <div class="flex flex-col items-center" v-for="item in consolesStore.consoles" :key="item.id">
       <button @click="(active = item.id) && (consolesStore.selected = item)"
         :disabled="isTransfer && item.countdown > 0 || item.finished">
