@@ -264,7 +264,7 @@ onBeforeMount(() => {
         <USelectMenu v-model="selectedTime" :options="appStore.times" :disabled="isCustomTime" />
         <UCheckbox v-model="isCustomTime" class="my-8" name="Personalizar" label="Personalizar" />
         <CustomTimeForm v-if="isCustomTime" @submit="(data) => setConsoleTime(data)" />
-        <UButton @click="setConsoleTime" class="mt-6" v-if="!isCustomTime">
+        <UButton @click="setConsoleTime" class="mt-6" v-if="!isCustomTime" size="xs">
           Iniciar
         </UButton>
       </section>
@@ -277,8 +277,8 @@ onBeforeMount(() => {
           <UButton variant="ghost" label="Cancelar" @click="() => {
             stopModal = false
             stopId = ''
-          }" />
-          <UButton label="Finalizar" @click="stop" />
+          }" size="xs" />
+          <UButton label="Finalizar" size="xs" @click="stop" />
         </div>
       </section>
     </UModal>

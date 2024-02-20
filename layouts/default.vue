@@ -45,13 +45,13 @@ onMounted(async () => {
           <TopbarSettings />
           <div class="ml-4 flex flex-row items-center !h-full">
             <UButton class="pointer-events-auto px-3 hover:!bg-transparent" color="gray" variant="ghost" :padded="false"
-              size="sm" @click="minimize">
+              size="xs" @click="minimize">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                 <path fill="currentColor" d="M14 8v1H3V8z"></path>
               </svg>
             </UButton>
             <UButton class="pointer-events-auto px-3 hover:!bg-transparent" color="gray" variant="ghost" :padded="false"
-              size="sm" @click="toggleMaximize">
+              size="xs" @click="toggleMaximize">
               <svg v-if="isMaximized" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                 <path fill="currentColor" d="M3 3v10h10V3zm9 9H4V4h8z"></path>
               </svg>
@@ -64,7 +64,7 @@ onMounted(async () => {
               </svg>
             </UButton>
             <UButton class="!pointer-events-auto !h-full px-3 hover:!bg-red-600 hover:text-gray-400 !rounded-none"
-              color="gray" variant="ghost" size="sm" @click="close">
+              color="gray" variant="ghost" size="xs" @click="close">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                 <path fill="currentColor" fill-rule="evenodd"
                   d="m7.116 8l-4.558 4.558l.884.884L8 8.884l4.558 4.558l.884-.884L8.884 8l4.558-4.558l-.884-.884L8 7.116L3.442 2.558l-.884.884z"
