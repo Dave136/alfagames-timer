@@ -26,7 +26,11 @@ const items = [
   }], [{
     label: 'Reload webview',
     // icon: 'i-heroicons-archive-box-20-solid'
-    icon: 'i-ph-arrows-clockwise'
+    icon: 'i-ph-arrows-clockwise',
+    click: () => {
+      invoke('reload_app')
+        .catch((error) => console.error("[ERROR] toggle_devtools", error))
+    }
   }, {
     label: 'Minimize',
     // icon: 'i-heroicons-arrow-right-circle-20-solid'

@@ -45,6 +45,13 @@ fn toggle_devtools(window: tauri::Window) {
     }
 }
 
+#[tauri::command]
+fn reload_app(window: tauri::Window) {
+    window
+        .with_webview(reload_webview_inner)
+        .expect("Error while reloading webview");
+}
+
 fn custom_menu() -> Menu {
     let app_menu = Menu::new()
         .add_native_item(MenuItem::About(
@@ -129,7 +136,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             play_sound,
             download_sound,
-            toggle_devtools
+            toggle_devtools,
+            reload_app,
         ])
         // .on_menu_event(handle_menu_event)
         // .menu(custom_menu())
