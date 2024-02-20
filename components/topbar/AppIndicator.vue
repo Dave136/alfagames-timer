@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { invoke } from '@tauri-apps/api';
+
 const appStore = useApp2Store();
 const about = toRef(appStore.modals, 'about');
 
@@ -18,7 +20,8 @@ const items = [
     icon: 'i-ph-wrench',
     shortcuts: ['E'],
     click: () => {
-      console.log('Edit')
+      invoke('toggle_devtools')
+        .catch((error) => console.error("[ERROR] toggle_devtools", error))
     }
   }], [{
     label: 'Reload webview',

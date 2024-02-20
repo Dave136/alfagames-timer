@@ -36,6 +36,15 @@ fn play_sound(name: &str, window: Window, app_handle: tauri::AppHandle) {
     });
 }
 
+#[tauri::command]
+fn toggle_devtools(window: tauri::Window) {
+    if window.is_devtools_open() {
+        window.close_devtools();
+    } else {
+        window.open_devtools();
+    }
+}
+
 fn custom_menu() -> Menu {
     let app_menu = Menu::new()
         .add_native_item(MenuItem::About(
@@ -117,7 +126,11 @@ fn handle_menu_event(event: WindowMenuEvent<Wry>) {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![play_sound, download_sound])
+        .invoke_handler(tauri::generate_handler![
+            play_sound,
+            download_sound,
+            toggle_devtools
+        ])
         // .on_menu_event(handle_menu_event)
         // .menu(custom_menu())
         .run(tauri::generate_context!())
