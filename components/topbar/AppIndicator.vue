@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { invoke } from '@tauri-apps/api';
+import { window } from '@tauri-apps/api';
 
 const appStore = useApp2Store();
 const about = toRef(appStore.modals, 'about');
@@ -34,11 +35,17 @@ const items = [
   }, {
     label: 'Minimize',
     // icon: 'i-heroicons-arrow-right-circle-20-solid'
-    icon: 'i-ph-arrow-down'
+    icon: 'i-ph-arrow-down',
+    click: () => {
+      window.appWindow.minimize()
+    }
   }], [{
     label: 'Quit',
     // icon: 'i-heroicons-trash-20-solid',
     icon: 'i-ph-power',
+    click: () => {
+      window.appWindow.close()
+    }
   }]
 ]
 </script>
