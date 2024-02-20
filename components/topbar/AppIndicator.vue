@@ -54,7 +54,7 @@ const items = [
     background: 'dark:bg-[#1e2227]',
     item: { disabled: 'cursor-text select-text' }
   }" :popper="{ placement: 'bottom-start' }">
-    <UButton class="pointer-events-auto" color="gray" variant="ghost">
+    <UButton class="pointer-events-auto ml-1" color="gray" variant="ghost" :padded="false">
       <img class="w-4" src="~/assets/img/logo.svg" alt="Alfagames Logo" />
     </UButton>
 

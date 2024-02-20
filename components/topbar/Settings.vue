@@ -26,9 +26,8 @@ const items = [
     background: 'dark:bg-[#1e2227]',
     item: { disabled: 'cursor-text select-text' }
   }" :popper="{ placement: 'bottom-start' }">
-    <UButton class="pointer-events-auto" color="gray" variant="ghost">
-      <UIcon name="i-ph-gear" class="flex-shrink-0 h-4 w-4 text-gray-400 dark:text-gray-500 ms-auto" />
-    </UButton>
+    <UButton class="pointer-events-auto transition-all" color="gray" variant="ghost" :padded="false" icon="i-ph-gear"
+      size="xs" />
 
     <template #item="{ item }">
       <UButton class="pointer-events-auto hover:!bg-transparent" block color="gray" :padded="false" variant="ghost">
