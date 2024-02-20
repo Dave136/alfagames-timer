@@ -1,8 +1,14 @@
 <script setup lang="ts">
+const appStore = useApp2Store();
+const about = toRef(appStore.modals, 'about');
+
 const items = [
   [{
     label: 'About',
     icon: 'i-ph-info',
+    click: () => {
+      about.value = true
+    }
     // avatar: {
     //   src: 'https://avatars.githubusercontent.com/u/739984?v=4'
     // }

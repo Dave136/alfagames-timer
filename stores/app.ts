@@ -40,6 +40,9 @@ export const useApp2Store = defineStore(
   () => {
     const dataDir = ref('');
     const soundsDir = ref<import('@tauri-apps/api/fs').FileEntry[]>([]);
+    const modals = reactive({
+      about: false,
+    });
 
     async function initialize() {
       const { createDir, readDir, BaseDirectory } = await import(
@@ -66,6 +69,7 @@ export const useApp2Store = defineStore(
 
     return {
       dataDir,
+      modals,
       soundsDir,
       initialize,
     };
