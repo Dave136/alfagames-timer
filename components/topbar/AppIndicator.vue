@@ -51,6 +51,7 @@ const items = [
 
 <template>
   <UDropdown :items="items" :ui="{
+    background: 'dark:bg-[#1e2227]',
     item: { disabled: 'cursor-text select-text' }
   }" :popper="{ placement: 'bottom-start' }">
     <UButton class="pointer-events-auto" color="gray" variant="ghost">
