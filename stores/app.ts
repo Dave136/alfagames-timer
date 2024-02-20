@@ -42,6 +42,7 @@ export const useApp2Store = defineStore(
     const soundsDir = ref<import('@tauri-apps/api/fs').FileEntry[]>([]);
     const modals = reactive({
       about: false,
+      settings: false,
     });
 
     async function initialize() {

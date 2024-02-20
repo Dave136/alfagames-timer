@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { invoke } from '@tauri-apps/api';
-import { window } from '@tauri-apps/api';
+import { invoke, window } from '@tauri-apps/api';
 
 const appStore = useApp2Store();
 const about = toRef(appStore.modals, 'about');

@@ -155,36 +155,36 @@ watch(isDelete, () => {
 </script>
 
 <template>
-  <div>
-    <UCard>
-      <template #header>
-        <header class="flex items-center justify-between">
-          <h4 class="text-xl">Tiempo</h4>
-          <UButton color="green" variant="soft" icon="i-ph-plus" @click="mode = 'creation'">Agregar</UButton>
-        </header>
-      </template>
+  <UCard>
+    <template #header>
+      <header class="flex items-center justify-between">
+        <h4 class="text-lg">Tiempo</h4>
+        <UButton color="green" variant="soft" icon="i-ph-plus" @click="mode = 'creation'" size="xs">Agregar</UButton>
+      </header>
+    </template>
 
-      <section>
-        <UTable :rows="appStore.times" :columns="columns">
-          <template #actions-data="{ row }">
-            <UButton color="green" variant="ghost" icon="i-ph-pencil-duotone" @click="editTime(row)" />
-            <UButton color="red" variant="ghost"
-              :icon="isDelete && itemId === row.id ? 'i-ph-check-duotone' : 'i-ph-trash-duotone'"
-              @click="deleteTime(row)" />
-          </template>
-        </UTable>
-      </section>
+    <section>
+      <UTable :rows="appStore.times" :columns="columns">
+        <template #actions-data="{ row }">
+          <UButton color="green" variant="ghost" icon="i-ph-pencil-duotone" @click="editTime(row)" size="xs" />
+          <UButton color="red" variant="ghost"
+            :icon="isDelete && itemId === row.id ? 'i-ph-check-duotone' : 'i-ph-trash-duotone'" size="xs"
+            @click="deleteTime(row)" />
+        </template>
+      </UTable>
+    </section>
 
-      <ConfigurationTimeForm ref="form" v-if="['creation', 'editing'].includes(mode)" />
+    <ConfigurationTimeForm ref="form" v-if="['creation', 'editing'].includes(mode)" />
 
-      <section class="mt-6 flex gap-2 justify-end" v-if="['creation', 'editing'].includes(mode)">
-        <UButton color="cyan" variant="soft" icon="i-ph-floppy-disk" @click="saveNewTime" v-if="mode === 'creation'">
-          Guardar</UButton>
-        <UButton color="cyan" variant="soft" icon="i-ph-floppy-disk" @click="saveEditedTime" v-if="mode === 'editing'">
-          Guardar
-        </UButton>
-        <UButton color="red" variant="ghost" icon="i-ph-x" @click="mode = 'normal'">Cancelar</UButton>
-      </section>
-    </UCard>
-  </div>
+    <section class="mt-6 flex gap-2 justify-end" v-if="['creation', 'editing'].includes(mode)">
+      <UButton color="cyan" variant="soft" icon="i-ph-floppy-disk" @click="saveNewTime" v-if="mode === 'creation'"
+        size="xs">
+        Guardar</UButton>
+      <UButton color="cyan" variant="soft" icon="i-ph-floppy-disk" @click="saveEditedTime" v-if="mode === 'editing'"
+        size="xs">
+        Guardar
+      </UButton>
+      <UButton color="red" variant="ghost" icon="i-ph-x" @click="mode = 'normal'" size="xs">Cancelar</UButton>
+    </section>
+  </UCard>
 </template>

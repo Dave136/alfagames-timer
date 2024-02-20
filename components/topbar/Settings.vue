@@ -1,11 +1,14 @@
 <script setup lang="ts">
+const appStore = useApp2Store();
+const settings = toRef(appStore.modals, 'settings');
+
 const items = [
   [{
     label: 'Settings',
     icon: 'i-ph-gear',
-    // avatar: {
-    //   src: 'https://avatars.githubusercontent.com/u/739984?v=4'
-    // }
+    click: () => {
+      settings.value = true
+    }
   }], [{
     label: 'Keyboard shortcuts',
     // icon: 'i-heroicons-pencil-square-20-solid',

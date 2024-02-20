@@ -87,11 +87,11 @@ onUnmounted(() => {
     <UCard>
       <template #header>
         <header class="flex items-center justify-between">
-          <h4 class="text-xl">Tono</h4>
+          <h4 class="text-lg">Tono</h4>
           <Motion class="flex gap-2" :initial="{ opacity: 0 }" :animate="{ opacity: 1 }" :exit="{ opacity: 0.2 }"
             v-if="soundSelected">
-            <UButton color="green" variant="soft" icon="i-ph-check" @click="setSound">Cambiar</UButton>
-            <UButton color="red" variant="ghost" icon="i-ph-x" @click="soundSelected = ''">Cancelar</UButton>
+            <UButton color="green" variant="soft" icon="i-ph-check" @click="setSound" size="xs">Cambiar</UButton>
+            <UButton color="red" variant="ghost" icon="i-ph-x" @click="soundSelected = ''" size="xs">Cancelar</UButton>
           </Motion>
         </header>
       </template>
@@ -105,7 +105,7 @@ onUnmounted(() => {
             <UIcon name="i-ph-music-notes-duotone"
               class="flex-shrink-0 w-4 h-4 text-gray-400 dark:text-gray-500 group-hover:text-gray-700 dark:group-hover:text-gray-200"
               :class="soundSelected === sound.id ? 'dark:text-green-500 dark:group-hover:text-green-400' : defaultSound === sound.id ? 'dark:text-pink-400' : 'dark:text-gray-500'" />
-            <button class="truncate relative text-gray-200 dark:text-white flex-1 text-left"
+            <button class="truncate relative text-gray-200 dark:text-white flex-1 text-left text-xs"
               :class="soundSelected === sound.id ? 'dark:text-green-500' : defaultSound === sound.id ? 'dark:text-pink-400' : 'dark:text-white'"
               @click="sound.id !== defaultSound && (soundSelected = sound.id)">
               {{ sound.name }}

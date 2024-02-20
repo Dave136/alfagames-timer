@@ -2,6 +2,7 @@
 const appStore = useApp2Store();
 
 const about = toRef(appStore.modals, 'about')
+const settings = toRef(appStore.modals, 'settings')
 </script>
 
 <template>
@@ -17,6 +18,20 @@ const about = toRef(appStore.modals, 'about')
         <p><b>Website:</b> <a href="https://github.com/Dave136/alfagames-timer" target="_blank"
             class="underline">alfagames timer</a></p>
       </div>
+    </UModal>
+    <UModal v-model="settings" :ui="{ width: '!w-[60vw] lg:max-w-full', height: '!h-[80vh]' }">
+      <section class="max-h-12 p-6">
+        <header class="flex justify-between">
+          <h3 class="text-xl">Configuración</h3>
+          <UButton color="white" variant="ghost" @click="settings = false" icon="i-ph-x"></UButton>
+        </header>
+        <hr class="my-4 border-gray-700">
+
+        <div class="grid grid-cols-2 mt-8 gap-8 mr-20">
+          <SettingsTimeConfiguration />
+          <SettingsNotificationSound />
+        </div>
+      </section>
     </UModal>
   </Teleport>
 </template>
