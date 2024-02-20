@@ -202,7 +202,7 @@ onBeforeMount(() => {
       <button @click="(active = item.id) && (consolesStore.selected = item)"
         :disabled="isTransfer && item.countdown > 0 || item.finished">
         <UCard
-          :ui="{ background: 'dark:bg-[#1c1f26]', base: `border !ring-0 relative ${active === item.id ? isTransfer ? 'border-green-400' : 'border-pink-400' : 'border-transparent'}` }">
+          :ui="{ background: 'dark:bg-[#1e1f22]', base: `border !ring-0 relative ${active === item.id ? isTransfer ? 'border-green-400' : 'border-pink-400' : 'border-transparent'}` }">
           <div class="flex flex-col items-center w-[7.5rem] h-[7.5rem]" v-if="item.countdown > 0">
             <!-- <Timer :countdown="item.countdown" @count="(time) => item.currentTime = time"
               @formatted="(time) => item.formatted = time" :ref="(el) => el && (timers[item.id] = el)"
