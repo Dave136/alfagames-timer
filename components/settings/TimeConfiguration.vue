@@ -155,7 +155,7 @@ watch(isDelete, () => {
 </script>
 
 <template>
-  <UCard>
+  <UCard class="!bg-transparent">
     <template #header>
       <header class="flex items-center justify-between">
         <h4 class="text-lg">Tiempo</h4>

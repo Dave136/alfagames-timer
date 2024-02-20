@@ -19,7 +19,8 @@ const settings = toRef(appStore.modals, 'settings')
             class="underline">alfagames timer</a></p>
       </div>
     </UModal>
-    <UModal v-model="settings" :ui="{ width: '!w-[60vw] lg:max-w-full', height: '!h-[80vh]' }">
+    <UModal v-model="settings"
+      :ui="{ background: 'dark:bg-[#1a1928]', width: '!w-[60vw] lg:max-w-full', height: '!h-[80vh]' }">
       <section class="max-h-12 p-6">
         <header class="flex justify-between">
           <h3 class="text-xl">Configuración</h3>
