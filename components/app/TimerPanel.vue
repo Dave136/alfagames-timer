@@ -117,7 +117,7 @@ function transferTime() {
 
 function stop() {
   consolesStore.stop(stopId.value)
-  timers.value[stopId.value].new();
+  timers.value[stopId.value].reset();
   stopModal.value = false;
   stopId.value = '';
 }
